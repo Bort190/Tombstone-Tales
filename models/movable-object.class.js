@@ -10,7 +10,8 @@ class MovableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    
+    offsetY = 0;
+
 
     loadImage(path) {
         this.img = new Image();
@@ -25,14 +26,34 @@ class MovableObject {
         });
     }
 
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawFrame(ctx) {
+        if (this instanceof Character || this instanceof Chicken) {
+            ctx.beginPath();
+            ctx.linewidth = '5';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
+
+    }
+
     moveRight() {
-        console.log("Moving Right");
+        this.x += this.speed;
+        this.otherDirection = false;
+
     }
 
     moveLeft() {
-        setInterval(() => {
-            this.x -= this.speed;
-        }, 1000 / 60)
+        this.x -= this.speed;
+        this.otherDirection = true;
+    }
+
+    jump() {
+        this.speedY = 25;
     }
 
     playAnimation(images) {
@@ -42,18 +63,26 @@ class MovableObject {
         this.currentImage++;
     }
 
-    applyGravity(){
+    applyGravity() {
         setInterval(() => {
-            if (this.isAboveGround()) {
-               this.y -= this.speedY;
-            this.speedY -= this.acceleration; 
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
             }
-            
-        }, 1000/25);
+
+        }, 1000 / 25);
     }
 
-    isAboveGround(){
+    isAboveGround() {
         return this.y < 200;
+    }
+
+    isColliding(obj) {
+        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
+            (this.y + this.offsetY + this.height) >= obj.y &&
+            (this.y + this.offsetY) <= (obj.y + obj.height) 
+            //&& obj.onCollisionCourse;  Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+
     }
 
 
