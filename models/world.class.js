@@ -5,8 +5,9 @@ class World {
     camera_x = 0;
     character = new Character();
     level = level1;
-    statusBar = new StatusBar(0);
-    CoinBar = new StatusBar(40);
+    statusBar = new StatusBar();
+    CoinBar = new CoinBar();
+    throwableObject = [];
 
 
     constructor(canvas, keyboard) {
@@ -15,21 +16,34 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     setWorld() {
         this.character.world = this;
     }
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
-                }
-            });
-        }, 1000);
+            this.checkCollisions();
+            this.checkThrowObject();
+        }, 100);
+    }
+
+    checkCollisions() {
+        this.level.enemies.forEach(enemy => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
+        });
+    }
+
+    checkThrowObject() {
+        if (this.keyboard.THROW) {
+            let bottle = new ThrowableObject(this.character.x +100, this.character.y +100);
+            this.throwableObject.push(bottle)
+        }
+
     }
 
 
@@ -37,6 +51,8 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
+        this.addObjectToMap(this.level.clouds);
+        this.addObjectToMap(this.throwableObject);
 
         this.ctx.translate(-this.camera_x, 0);
         //-----space for fixed objects----//
@@ -47,7 +63,7 @@ class World {
         this.addObjectToMap(this.level.enemies);
         this.addToMap(this.character);
 
-        this.addObjectToMap(this.level.clouds);
+
         this.ctx.translate(-this.camera_x, 0);
 
 
@@ -67,7 +83,7 @@ class World {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
-        mo.draw(this.ctx);
+        mo.draw(this.ctx); //entspricht drawImage() aus drawableObject
         mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {

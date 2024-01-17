@@ -2,11 +2,11 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
-function init(){
+function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    
-  
+
+
     console.log("Character: ", world.character);
 }
 
@@ -15,18 +15,20 @@ window.addEventListener('keydown', (e) => {
         case 'ArrowLeft':
             keyboard.LEFT = true;
             break;
-            case 'ArrowRight':
+        case 'ArrowRight':
             keyboard.RIGHT = true;
             break;
-            case 'ArrowUp':
+        case 'ArrowUp':
             keyboard.UP = true;
             break;
-            case 'ArrowDown':
+        case 'ArrowDown':
             keyboard.DOWN = true;
             break;
-            case ' ':
+        case ' ':
             keyboard.SPACE = true;
             break;
+        case 'd':
+            keyboard.THROW = true;
         default:
             break;
     }
@@ -38,18 +40,20 @@ window.addEventListener('keyup', (e) => {
         case 'ArrowLeft':
             keyboard.LEFT = false;
             break;
-            case 'ArrowRight':
+        case 'ArrowRight':
             keyboard.RIGHT = false;
             break;
-            case 'ArrowUp':
+        case 'ArrowUp':
             keyboard.UP = false;
             break;
-            case 'ArrowDown':
+        case 'ArrowDown':
             keyboard.DOWN = false;
             break;
-            case ' ':
+        case ' ':
             keyboard.SPACE = false;
             break;
+        case 'd':
+            keyboard.THROW = false;
         default:
             break;
     }
