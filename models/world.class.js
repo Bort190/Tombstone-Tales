@@ -5,6 +5,8 @@ class World {
     camera_x = 0;
     character = new Character();
     level = level1;
+    statusBar = new StatusBar(0);
+    CoinBar = new StatusBar(40);
 
 
     constructor(canvas, keyboard) {
@@ -19,11 +21,12 @@ class World {
     setWorld() {
         this.character.world = this;
     }
-    checkCollisions(){
+    checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
-                if(this.character.isColliding(enemy)){
-                    console.log('Colliding');
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
                 }
             });
         }, 1000);
@@ -32,11 +35,18 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
         this.addObjectToMap(this.level.backgroundObjects);
+
+        this.ctx.translate(-this.camera_x, 0);
+        //-----space for fixed objects----//
+        this.addToMap(this.statusBar);
+        this.addToMap(this.CoinBar);
+        this.ctx.translate(this.camera_x, 0);
+
         this.addObjectToMap(this.level.enemies);
-        this.addToMap(this.character)
+        this.addToMap(this.character);
+
         this.addObjectToMap(this.level.clouds);
         this.ctx.translate(-this.camera_x, 0);
 
