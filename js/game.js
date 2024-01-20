@@ -8,7 +8,22 @@ function init() {
 
 
     console.log("Character: ", world.character);
+
+    canvas.addEventListener("click", (evt) => {
+        var mousePos = getMousePos(canvas, evt);
+        alert(Math.floor(mousePos.x) + ',' + Math.floor(mousePos.y));
+    }, false);
+
+    //Get Mouse Position
+    function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    }
 }
+
 
 window.addEventListener('keydown', (e) => {
     switch (e.key) {

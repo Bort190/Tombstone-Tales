@@ -13,7 +13,10 @@ constructor(imagePath){
 }
 
 moveClouds(){
-    this.moveLeft();
+    setInterval(() => {
+       this.moveLeft(); 
+    }, 100);
+    
 }
 
 }

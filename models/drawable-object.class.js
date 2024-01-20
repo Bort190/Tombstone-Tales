@@ -6,6 +6,7 @@ class DrawableObject {
     width = 140;
     currentImage = 0;
     imageCache = {};
+
  
 
     loadImage(path) {
@@ -26,7 +27,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken) {
+        if (this instanceof Character || this instanceof Chicken || this instanceof Collectable) {
             ctx.beginPath();
             ctx.linewidth = '5';
             ctx.strokeStyle = 'blue';
