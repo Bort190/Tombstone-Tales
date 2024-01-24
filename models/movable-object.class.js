@@ -1,14 +1,33 @@
+
 class MovableObject extends DrawableObject {
     speed = 0.5;
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    offsetX;
+    offsetX = 0;
     offsetY = 0;
     energy = 100;
     lastHit = 0;
+    attackRange = 50;
+    attackCooldown = 0;
+    meleeDamage = 100;
 
 
+    playAnimation(images) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
+
+    playAnimationOnce(images, lastImage) {
+        let i = this.currentImage % images.length;
+        let path = images[i];
+        this.img = this.imageCache[path];
+        if (i < lastImage) {
+            this.currentImage++;
+        }
+    }
 
     moveRight() {
         this.x += this.speed;
@@ -22,14 +41,30 @@ class MovableObject extends DrawableObject {
 
     jump() {
         this.speedY = 25;
+        if (!this.isAboveGround()) {
+            this.currentImage = 0;
+        }
+    }
+    meleeAttack(enemy) {
+        this.attackCooldown = 2;
+        this.hit(enemy, this.meleeDamage, 20, 18);
     }
 
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
+    hit(obj, damage, knockbackTime, knocbackHeight) {
+        if (!obj.isHurt()) {
+            obj.energy -= damage;
+            if (obj.energy <= 0) {
+                obj.energy = 0;
+                obj.currentImage = 0;
+            } else {
+                obj.lastHit = new Date().getTime();
+            }
+            obj.knockback(knockbackTime, knocbackHeight);
+        }
     }
+
+
+
 
     applyGravity() {
         setInterval(() => {
@@ -40,23 +75,19 @@ class MovableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
-    hit() {
-        if (!this.isHurt()) {
-            this.energy -= 10;
-            if (this.energy < 0) {
-                this.energy = 0;
-            } else {
-                this.lastHit = new Date().getTime();
+
+
+    knockback(time, height) {
+        let knockbackTime = time;
+        this.speedY = height;
+        setInterval(() => {
+            if (knockbackTime > 0) {
+                if (this.otherDirection) { this.x += 6; }
+                else { this.x -= 6; }
+
+                knockbackTime--;
             }
-            this.speedY = 18;
-            let knockbackTime = 20;
-            setInterval(() => {
-                if (knockbackTime > 0) {
-                    this.x -= 6;
-                    knockbackTime--;
-                }
-            }, 1000 / 60);
-        }
+        }, 1000 / 30);
     }
 
     isHurt() {
@@ -66,7 +97,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 
     isAboveGround() {
@@ -74,18 +105,32 @@ class MovableObject extends DrawableObject {
             return true;
         }
         else {
-            return this.y < 230;
+            return this.y + this.height < 440;
         }
 
     }
 
     isColliding(obj) {
-        return (this.x + this.width - this.offsetX) >= obj.x && this.x <= (obj.x + obj.width) &&
+        return (this.x + this.width - this.offsetX) >= obj.x &&
+            this.x <= (obj.x + obj.width) &&
             (this.y + this.offsetY + this.height) >= obj.y &&
             (this.y + this.offsetY) <= (obj.y + obj.height)
-        //&& obj.onCollisionCourse;  Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
-
+        //&& obj.onCollisionCourse;  Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. 
+        //Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
+
+    isNearby(obj) { //umbenennen, damit die Funktion deutlicher wird
+        return (this.x + this.width - this.offsetX + this.attackRange) >= obj.x &&
+            (this.x - this.attackRange) <= (obj.x + obj.width);
+    }
+
+    checkAttackCooldown() {
+        setInterval(() => {
+            this.attackCooldown--;
+
+        }, 1000)
+    }
+
 
 
 }

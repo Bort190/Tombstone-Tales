@@ -44,6 +44,10 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'd':
             keyboard.THROW = true;
+            break;
+        case 'f':
+            keyboard.MELEE = true;
+            break;
         default:
             break;
     }
@@ -69,6 +73,10 @@ window.addEventListener('keyup', (e) => {
             break;
         case 'd':
             keyboard.THROW = false;
+            break;
+        case 'f':
+            keyboard.MELEE = false;
+            break;
         default:
             break;
     }

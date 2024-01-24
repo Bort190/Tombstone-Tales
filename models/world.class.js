@@ -37,17 +37,50 @@ class World {
             this.checkCollisions();
             this.checkThrowObject();
             this.getCollectable();
+            this.checkPlayerInAttackRange();
         }, 100);
     }
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit();
+            if (this.character.isColliding(enemy) && !enemy.isDead()) {
+                this.character.hit(this.character, 10, 20, 18);
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
     }
+
+    checkMeleeRange() {
+        this.level.enemies.forEach((enemy, index) => {
+            if (this.character.isNearby(enemy) && this.character.attackCooldown < 0) {
+                this.character.meleeAttack(enemy, index)
+                this.deleteEnemy(enemy, index);
+            }
+        });
+    }
+
+
+    checkPlayerInAttackRange() {
+        this.level.enemies.forEach((enemy, index) => {
+            if (enemy.isNearby(this.character) && enemy.attackCooldown < 0 && !enemy.isDead()) {
+                console.log("yes");
+                enemy.meleeAttack(this.character);
+            }
+        });
+
+    }
+
+    deleteEnemy(enemy, index) {
+        if (enemy.isDead() == true) {
+            setTimeout(() => {
+                this.level.enemies.splice(index, 1);
+            }, 5000)
+
+
+
+        }
+    }
+
 
     getCollectable() {
         this.collectableArray.forEach(collectable => {
@@ -63,17 +96,47 @@ class World {
         if (this.keyboard.THROW && this.throwReady() && this.character.weaponCount > 0) {
 
             if (!this.character.otherDirection) {
-                let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, 1);
-                this.throwableObject.push(bottle);
+                let bone = new ThrowableObject(this.character.x + 100, this.character.y + 100, 1);
+                this.throwableObject.push(bone);
                 this.throwCooldown = 4;
+                this.checkForHit(bone);
             }
             else {
-                let bottle = new ThrowableObject(this.character.x - 20, this.character.y + 100, -1);
-                this.throwableObject.push(bottle);
+                let bone = new ThrowableObject(this.character.x - 20, this.character.y + 100, -1);
+                this.throwableObject.push(bone);
                 this.throwCooldown = 4;
+                this.checkForHit(bone);
             }
         }
+
     }
+
+    checkForHit(bone) {
+
+        let deleteCounter = 0;
+        setInterval(() => {
+            let index = this.throwableObject.indexOf(bone);
+            this.level.enemies.forEach((enemy) => {
+                if (bone.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
+
+                    bone.hit(enemy, 5, 5, 9)
+                    this.throwableObject.splice(index, 1);
+                    deleteCounter = 0;
+                }
+                else if (deleteCounter > 40) {
+                    this.throwableObject.splice(index, 1);
+                    deleteCounter = 0;
+                }
+
+                else {
+                    deleteCounter++
+                }
+            })
+        }, 100);
+
+    }
+
+
 
     throwReady() {
         return this.throwCooldown <= 0;
@@ -129,7 +192,7 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx); //entspricht drawImage() aus drawableObject
-        //mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
