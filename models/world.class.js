@@ -53,6 +53,7 @@ class World {
     checkMeleeRange() {
         this.level.enemies.forEach((enemy, index) => {
             if (this.character.isNearby(enemy) && this.character.attackCooldown < 0) {
+                this.character.currentImage = 0;
                 this.character.meleeAttack(enemy, index)
                 this.deleteEnemy(enemy, index);
             }
@@ -98,13 +99,13 @@ class World {
             if (!this.character.otherDirection) {
                 let bone = new ThrowableObject(this.character.x + 100, this.character.y + 100, 1);
                 this.throwableObject.push(bone);
-                this.throwCooldown = 4;
+                this.throwCooldown = 8;
                 this.checkForHit(bone);
             }
             else {
                 let bone = new ThrowableObject(this.character.x - 20, this.character.y + 100, -1);
                 this.throwableObject.push(bone);
-                this.throwCooldown = 4;
+                this.throwCooldown = 8;
                 this.checkForHit(bone);
             }
         }
@@ -112,7 +113,6 @@ class World {
     }
 
     checkForHit(bone) {
-
         let deleteCounter = 0;
         setInterval(() => {
             let index = this.throwableObject.indexOf(bone);
@@ -123,7 +123,7 @@ class World {
                     this.throwableObject.splice(index, 1);
                     deleteCounter = 0;
                 }
-                else if (deleteCounter > 40) {
+                else if (deleteCounter > 80) {
                     this.throwableObject.splice(index, 1);
                     deleteCounter = 0;
                 }

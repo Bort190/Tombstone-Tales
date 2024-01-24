@@ -64,6 +64,34 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/0_Reaper_Man_Jump Start_014.png',
         'img/2_character_pepe/3_jump/0_Reaper_Man_Jump Start_015.png'
     ];
+    imagesMelee = [
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_000.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_001.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_002.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_003.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_004.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_005.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_006.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_007.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_008.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_009.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_010.png',
+        'img/2_character_pepe/6_melee/0_Reaper_Man_Slashing_011.png',
+    ];
+    imagesThrowing = [
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_000.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_001.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_002.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_003.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_004.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_005.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_006.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_007.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_008.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_009.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_010.png',
+        'img/2_character_pepe/7_throwing/0_Reaper_Man_Throwing_011.png',
+    ];
 
     imagesDead = [
         'img/2_character_pepe/5_dead/0_Reaper_Man_Dying_000.png',
@@ -98,7 +126,7 @@ class Character extends MovableObject {
     ];
 
     walking_sound = new Audio('audio/walking.mp3');
-    weaponCount = 5;
+    weaponCount = 10;
 
 
     constructor() {
@@ -106,6 +134,8 @@ class Character extends MovableObject {
         this.loadImages(this.imagesWalking);
         this.loadImages(this.imagesJumping);
         this.loadImages(this.imagesFalling);
+        this.loadImages(this.imagesMelee);
+        this.loadImages(this.imagesThrowing);
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesHurt);
@@ -128,7 +158,9 @@ class Character extends MovableObject {
                     //this.walking_sound.play();
                 }
                 if (this.world.keyboard.UP && !this.isAboveGround() || this.world.keyboard.SPACE && !this.isAboveGround()) {
-                    this.jump();
+                    if (!this.isHurt()) {
+                        this.jump();
+                    }
                 }
                 if (this.world.keyboard.MELEE) {
                     this.world.checkMeleeRange();
@@ -153,6 +185,12 @@ class Character extends MovableObject {
                 else {
                     this.playAnimationOnce(this.imagesFalling, 6);
                 }
+            }
+            else if (this.world.keyboard.MELEE) {
+                this.playAnimationOnce(this.imagesMelee, 11);
+            }
+            else if (this.world.keyboard.THROW) {
+                this.playAnimationOnce(this.imagesThrowing, 11);
             }
             else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.imagesWalking);

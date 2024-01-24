@@ -47,6 +47,7 @@ class MovableObject extends DrawableObject {
     }
     meleeAttack(enemy) {
         this.attackCooldown = 2;
+        this.currentImage = 0;
         this.hit(enemy, this.meleeDamage, 20, 18);
     }
 
@@ -62,10 +63,6 @@ class MovableObject extends DrawableObject {
             obj.knockback(knockbackTime, knocbackHeight);
         }
     }
-
-
-
-
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -130,6 +127,8 @@ class MovableObject extends DrawableObject {
 
         }, 1000)
     }
+
+    
 
 
 
