@@ -9,8 +9,8 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     attackRange = 50;
-    attackCooldown = 0;
-    meleeDamage = 100;
+    attackAnimationCount = 0;
+    meleeDamage = 10;
 
 
     playAnimation(images) {
@@ -40,23 +40,22 @@ class MovableObject extends DrawableObject {
     }
 
     jump() {
-        this.speedY = 25;
+        this.speedY = 30;
         if (!this.isAboveGround()) {
             this.currentImage = 0;
         }
     }
     meleeAttack(enemy) {
-        this.attackCooldown = 2;
-        this.currentImage = 0;
         this.hit(enemy, this.meleeDamage, 20, 18);
     }
 
     hit(obj, damage, knockbackTime, knocbackHeight) {
         if (!obj.isHurt()) {
+	    obj.currentImage = 0;
             obj.energy -= damage;
             if (obj.energy <= 0) {
                 obj.energy = 0;
-                obj.currentImage = 0;
+                
             } else {
                 obj.lastHit = new Date().getTime();
             }
@@ -69,7 +68,7 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-        }, 1000 / 25);
+        }, 1000 / 30);
     }
 
 
@@ -81,7 +80,6 @@ class MovableObject extends DrawableObject {
             if (knockbackTime > 0) {
                 if (this.otherDirection) { this.x += 6; }
                 else { this.x -= 6; }
-
                 knockbackTime--;
             }
         }, 1000 / 30);
@@ -122,12 +120,13 @@ class MovableObject extends DrawableObject {
     }
 
     checkAttackCooldown() {
-        setInterval(() => {
             this.attackCooldown--;
-
-        }, 1000)
+	    this.attackAnimationCount--;  
     }
 
+    isAttacking(){
+	    return this.attackAnimationCount > 0;
+    }
     
 
 

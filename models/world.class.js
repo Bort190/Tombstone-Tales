@@ -35,10 +35,10 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-            this.checkThrowObject();
             this.getCollectable();
             this.checkPlayerInAttackRange();
-        }, 100);
+            this.throwCooldown--;
+        }, 200);
     }
 
     checkCollisions() {
@@ -52,9 +52,8 @@ class World {
 
     checkMeleeRange() {
         this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isNearby(enemy) && this.character.attackCooldown < 0) {
-                this.character.currentImage = 0;
-                this.character.meleeAttack(enemy, index)
+            if (this.character.isNearby(enemy)) {
+                this.character.meleeAttack(enemy)
                 this.deleteEnemy(enemy, index);
             }
         });
@@ -68,17 +67,13 @@ class World {
                 enemy.meleeAttack(this.character);
             }
         });
-
     }
 
     deleteEnemy(enemy, index) {
         if (enemy.isDead() == true) {
             setTimeout(() => {
                 this.level.enemies.splice(index, 1);
-            }, 5000)
-
-
-
+            }, 3000)
         }
     }
 
@@ -93,8 +88,7 @@ class World {
     }
 
     checkThrowObject() {
-        this.throwCooldown--;
-        if (this.keyboard.THROW && this.throwReady() && this.character.weaponCount > 0) {
+        if (this.throwReady() && this.character.weaponCount > 0) {
 
             if (!this.character.otherDirection) {
                 let bone = new ThrowableObject(this.character.x + 100, this.character.y + 100, 1);
@@ -118,7 +112,6 @@ class World {
             let index = this.throwableObject.indexOf(bone);
             this.level.enemies.forEach((enemy) => {
                 if (bone.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
-
                     bone.hit(enemy, 5, 5, 9)
                     this.throwableObject.splice(index, 1);
                     deleteCounter = 0;
@@ -127,7 +120,6 @@ class World {
                     this.throwableObject.splice(index, 1);
                     deleteCounter = 0;
                 }
-
                 else {
                     deleteCounter++
                 }
@@ -135,8 +127,6 @@ class World {
         }, 100);
 
     }
-
-
 
     throwReady() {
         return this.throwCooldown <= 0;

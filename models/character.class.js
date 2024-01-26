@@ -3,7 +3,7 @@ class Character extends MovableObject {
     y = 70;
     height = 230;
     width = 160;
-    speed = 5;
+    speed = 8;
     world;
     offsetX = 50;
     imagesWalking = [
@@ -140,7 +140,6 @@ class Character extends MovableObject {
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesHurt);
         this.applyGravity();
-        this.checkAttackCooldown();
         this.animate();
     }
 
@@ -162,12 +161,18 @@ class Character extends MovableObject {
                         this.jump();
                     }
                 }
-                if (this.world.keyboard.MELEE) {
+                if (this.world.keyboard.MELEE && !this.isAttacking()) {
+                    this.currentImage = 0;
+                    this.attackAnimationCount = 8;
                     this.world.checkMeleeRange();
                 }
+                if (this.world.keyboard.THROW) {
+                    this.world.checkThrowObject();
+                }
                 this.world.camera_x = -this.x + 100;
+                this.checkAttackCooldown();
             }
-        }, 1000 / 60);
+        }, 1000 / 30);
 
 
         setInterval(() => {
@@ -179,6 +184,7 @@ class Character extends MovableObject {
                 this.playAnimation(this.imagesHurt);
             }
             else if (this.isAboveGround()) {
+
                 if (this.speedY > 0) {
                     this.playAnimationOnce(this.imagesJumping, 11);
                 }
@@ -186,7 +192,7 @@ class Character extends MovableObject {
                     this.playAnimationOnce(this.imagesFalling, 6);
                 }
             }
-            else if (this.world.keyboard.MELEE) {
+            else if (this.isAttacking()) {
                 this.playAnimationOnce(this.imagesMelee, 11);
             }
             else if (this.world.keyboard.THROW) {
@@ -199,6 +205,6 @@ class Character extends MovableObject {
                 this.playAnimation(this.imagesIdle);
             }
 
-        }, 40)
+        }, 1000 / 30)
     }
 }

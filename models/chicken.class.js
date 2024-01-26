@@ -45,7 +45,7 @@ class Chicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.5;
         this.applyGravity();
         this.animate();
-        //this.checkAttackCooldown()
+
     }
 
 
@@ -55,7 +55,8 @@ class Chicken extends MovableObject {
                 this.moveLeft();
             }
             this.otherDirection = true;
-        }, 1000 / 60)
+            this.checkAttackCooldown()
+        }, 1000 / 40)
 
 
         setInterval(() => {
@@ -69,13 +70,14 @@ class Chicken extends MovableObject {
                 this.playAnimationOnce(this.imagesDead, 7);
             }
             else if (this.isHurt()) {
-                this.playAnimation(this.imagesHurt);
+                this.playAnimationOnce(this.imagesHurt, 9);
+                console.log(this.currentImage)
             }
             else {
                 this.playAnimation(this.imagesWalking);
             }
 
 
-        }, 250)
+        }, 100)
     }
 }
