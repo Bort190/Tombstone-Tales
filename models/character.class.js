@@ -172,13 +172,13 @@ class Character extends MovableObject {
                 this.world.camera_x = -this.x + 100;
                 this.checkAttackCooldown();
             }
-        }, 1000 / 30);
+        }, 1000 / 50);
 
 
         setInterval(() => {
 
             if (this.isDead()) {
-                this.playAnimationOnce(this.imagesDead, 13);
+                this.playAnimationOnce(this.imagesDead);
             }
             else if (this.isHurt()) {
                 this.playAnimation(this.imagesHurt);
@@ -186,17 +186,17 @@ class Character extends MovableObject {
             else if (this.isAboveGround()) {
 
                 if (this.speedY > 0) {
-                    this.playAnimationOnce(this.imagesJumping, 11);
+                    this.playAnimationOnce(this.imagesJumping);
                 }
                 else {
-                    this.playAnimationOnce(this.imagesFalling, 6);
+                    this.playAnimationOnce(this.imagesFalling);
                 }
             }
             else if (this.isAttacking()) {
-                this.playAnimationOnce(this.imagesMelee, 11);
+                this.playAnimationOnce(this.imagesMelee);
             }
             else if (this.world.keyboard.THROW) {
-                this.playAnimationOnce(this.imagesThrowing, 11);
+                this.playAnimationOnce(this.imagesThrowing);
             }
             else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 this.playAnimation(this.imagesWalking);

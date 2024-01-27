@@ -62,10 +62,38 @@ class World {
 
     checkPlayerInAttackRange() {
         this.level.enemies.forEach((enemy, index) => {
-            if (enemy.isNearby(this.character) && enemy.attackCooldown < 0 && !enemy.isDead()) {
-                console.log("yes");
-                enemy.meleeAttack(this.character);
+            if (enemy.isNearby(this.character) && !enemy.isDead()) {
+                if(!enemy.isAttacking()){
+                    enemy.currentImage = 0;
+                }
+                console.log(enemy.currentImage)
+                enemy.speed = 0;
+                enemy.attackCooldown--;
+               
+                enemy.attackAnimationCount = 20
+
+                if (enemy.attackCooldown < 0) {
+                    enemy.meleeAttack(this.character);
+
+                }
             }
+            else {
+                enemy.speed = 0.5;
+                enemy.attackCooldown = 40;
+            }
+
+
+
+
+            //      console.log(enemy.currentImage)
+            //      if(enemy.attackCooldown<0 && enemy.isNearby(this.character)){
+            //           enemy.meleeAttack(this.character);
+            //          enemy.currentImage = 0;
+            //         enemy.attackAnimationCount = 10
+            //        enemy.attackCooldown = 40;
+            //        enemy.speed = 0.15 + Math.random() * 0.5;
+            //  }
+
         });
     }
 
@@ -182,7 +210,7 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx); //entspricht drawImage() aus drawableObject
-        // mo.drawFrame(this.ctx);
+        //mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);

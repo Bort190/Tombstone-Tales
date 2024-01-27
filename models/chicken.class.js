@@ -3,6 +3,7 @@ class Chicken extends MovableObject {
     y = 200;
     height = 150;
     width = 140;
+    speed = 0.5;
     imagesWalking = [
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk2.png',
@@ -32,17 +33,29 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/3_hurt/Hurt4.png',
         'img/3_enemies_chicken/chicken_normal/3_hurt/Hurt5.png'
     ];
+    imagesAttack = [
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack1.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack2.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack3.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack4.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack5.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack6.png',
+
+        
+    ];
 
     attackRange = 30;
-    meleeDamage = 50;
+    meleeDamage = 5;
+    attackCooldown = 40;
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png');
         this.loadImages(this.imagesWalking);
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesHurt);
-        this.x = 200 + Math.random() * 500;
-        this.speed = 0.15 + Math.random() * 0.5;
+        this.loadImages(this.imagesAttack);
+        this.x = 200 + Math.random() * 500;      
+        //this.speed = 0.15 + Math.random() * 0.5;
         this.applyGravity();
         this.animate();
 
@@ -67,17 +80,19 @@ class Chicken extends MovableObject {
                     this.height = 130;
                 }, 800);
 
-                this.playAnimationOnce(this.imagesDead, 7);
+                this.playAnimationOnce(this.imagesDead);
             }
-            else if (this.isHurt()) {
-                this.playAnimationOnce(this.imagesHurt, 9);
-                console.log(this.currentImage)
+            else if(this.isAttacking()){
+                this.playAnimation(this.imagesAttack);
             }
-            else {
+            else if (this.isHurt() && !this.animationFinished) {               
+                    this.playAnimationOnce(this.imagesHurt);                               
+            }
+            else{
                 this.playAnimation(this.imagesWalking);
             }
 
 
-        }, 100)
+        }, 150)
     }
 }

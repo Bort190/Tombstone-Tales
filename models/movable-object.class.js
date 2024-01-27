@@ -11,6 +11,8 @@ class MovableObject extends DrawableObject {
     attackRange = 50;
     attackAnimationCount = 0;
     meleeDamage = 10;
+    animationFinished = false;
+    attackCooldown = 0;
 
 
     playAnimation(images) {
@@ -20,12 +22,16 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    playAnimationOnce(images, lastImage) {
+    playAnimationOnce(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
-        if (i < lastImage) {
+        if (i < images.length -1) {
             this.currentImage++;
+            this.animationFinished = false
+        }
+        else if(i == images.length -1){
+            this.animationFinished = true
         }
     }
 
@@ -49,17 +55,17 @@ class MovableObject extends DrawableObject {
         this.hit(enemy, this.meleeDamage, 20, 18);
     }
 
-    hit(obj, damage, knockbackTime, knocbackHeight) {
+    hit(obj, damage, knockbackTime, knockbackHeight) {
         if (!obj.isHurt()) {
-	    obj.currentImage = 0;
+            obj.currentImage = 0;
             obj.energy -= damage;
+            obj.animationFinished = false;
             if (obj.energy <= 0) {
                 obj.energy = 0;
-                
             } else {
                 obj.lastHit = new Date().getTime();
             }
-            obj.knockback(knockbackTime, knocbackHeight);
+            obj.knockback(knockbackTime, knockbackHeight);
         }
     }
     applyGravity() {
@@ -120,14 +126,14 @@ class MovableObject extends DrawableObject {
     }
 
     checkAttackCooldown() {
-            this.attackCooldown--;
-	    this.attackAnimationCount--;  
+        this.attackAnimationCount--;
+        this.attackCooldown--;
     }
 
-    isAttacking(){
-	    return this.attackAnimationCount > 0;
+    isAttacking() {
+        return this.attackAnimationCount > 0;
     }
-    
+
 
 
 
