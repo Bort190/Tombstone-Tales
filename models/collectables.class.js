@@ -1,20 +1,28 @@
 class Collectable extends DrawableObject{
 
-    index;
 
-    constructor(path, index){
+    constructor(path, type, size){
           super().loadImage(path);
-          this.width = 80;
-          this.height = 80;
+          this.width = size;
+          this.height = size;
+	  this.offsetY = 10;
+	  this.offsetX = 10;
           this.x = 500;
-          this.randomizePosition();
-          this.index = index;
+          this.randomizePosition(type);
 
     }
   
-randomizePosition(){
+randomizePosition(type){
     this.x = Math.random()*3000;
-    this.y = 120 + Math.random()*75;
+
+if(type == 'bone'){
+ 	  this.y = 380;
+
+}
+else{
+ this.y = 120 + Math.random()*75;
+}
+  
 }
 
 

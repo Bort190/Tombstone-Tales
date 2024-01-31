@@ -2,8 +2,12 @@ class Chicken extends MovableObject {
 
     y = 200;
     height = 150;
-    width = 140;
+    width = 120;
     speed = 0.5;
+    offsetX = 15;
+    initialAttackAnimationCount = 7;
+    initialAttackCooldown = 16;
+
     imagesWalking = [
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk2.png',
@@ -39,14 +43,11 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack3.png',
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack4.png',
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack5.png',
-        'img/3_enemies_chicken/chicken_normal/4_attack/Attack6.png',
-
-        
+       // 'img/3_enemies_chicken/chicken_normal/4_attack/Attack6.png',        
     ];
 
-    attackRange = 30;
-    meleeDamage = 5;
-    attackCooldown = 40;
+    attackRange = 25;
+    meleeDamage = 15;
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png');
@@ -65,27 +66,34 @@ class Chicken extends MovableObject {
     animate() {
         setInterval(() => {
             if (!this.isHurt() && !this.isDead()) {
-                this.moveLeft();
+                //this.moveLeft();
             }
-            this.otherDirection = true;
+if(this.x < world.character.x){
+            this.otherDirection = false;
+}
+else{
+this.otherDirection = true;
+}
+
+
+
             this.checkAttackCooldown()
         }, 1000 / 40)
 
 
         setInterval(() => {
             if (this.isDead()) {
-
                 setTimeout(() => {
                     this.width = 190;
-                    this.height = 130;
+                    this.height = 120;
                 }, 800);
 
                 this.playAnimationOnce(this.imagesDead);
             }
             else if(this.isAttacking()){
-                this.playAnimation(this.imagesAttack);
+                this.playAnimationOnce(this.imagesAttack);
             }
-            else if (this.isHurt() && !this.animationFinished) {               
+            else if (this.isHurt()) {               
                     this.playAnimationOnce(this.imagesHurt);                               
             }
             else{
@@ -93,6 +101,6 @@ class Chicken extends MovableObject {
             }
 
 
-        }, 150)
+        }, 120)
     }
 }

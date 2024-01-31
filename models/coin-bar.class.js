@@ -30,19 +30,19 @@ class CoinBar extends DrawableObject {
     }
 
     resolveImageIndex() {
-        if (this.coins == 100) {
+        if (this.coins == 10) {
             return 5;
         }
-        else if (this.coins > 80) {
+        else if (this.coins > 8) {
             return 4;
         }
-        else if (this.coins > 60) {
+        else if (this.coins > 6) {
             return 3;
         }
-        else if (this.coins > 40) {
+        else if (this.coins > 4) {
             return 2;
         }
-        else if (this.coins > 20) {
+        else if (this.coins > 2) {
             return 1;
         }
         else {

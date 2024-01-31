@@ -6,16 +6,25 @@ class World {
     character = new Character();
     level = level1;
     statusBar = new StatusBar();
-    CoinBar = new CoinBar();
+    coinBar = new CoinBar();
+    endbossHealthBar = new EndbossHealthBar();
+    endbossImage = new Image();
+    coinBarImage = new Image();
+    boneImage = new Image();
     throwableObject = [];
     throwCooldown = 4;
     collectableArray = [];
+    ammoArray = [];
+    knockbackLeft = false;
 
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+	this.coinBarImage.src = 'img/8_coin/1.png';
+	this.boneImage.src = 'img/6_bones/bottle_rotation/1.png';
+	this.endbossImage.src = 'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png'
         this.draw();
         this.setWorld();
         this.run();
@@ -24,14 +33,22 @@ class World {
     setWorld() {
         this.character.world = this;
         this.setCollectables();
+	this.setAmmo()
+	
     }
 
     setCollectables() {
         for (let i = 0; i < 6; i++) {
-            this.collectableArray.push(new Collectable('img/8_coin/1.png', this.collectableIndex));
+            this.collectableArray.push(new Collectable('img/8_coin/1.png', 'skull', 80));
         }
-
     }
+
+    setAmmo() {
+        for (let i = 0; i < 6; i++) {
+            this.ammoArray.push(new Collectable('img/6_bones/bottle_rotation/1.png', 'bone', 65));
+        }
+    }
+
     run() {
         setInterval(() => {
             this.checkCollisions();
@@ -44,7 +61,7 @@ class World {
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy) && !enemy.isDead()) {
-                this.character.hit(this.character, 10, 20, 18);
+                this.character.hit(this.character, 10, 20, 18);			
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
@@ -55,6 +72,8 @@ class World {
             if (this.character.isNearby(enemy)) {
                 this.character.meleeAttack(enemy)
                 this.deleteEnemy(enemy, index);
+		console.log(enemy.energy)
+		this.endbossHealthBar.setPercentage(enemy.energy)
             }
         });
     }
@@ -63,45 +82,40 @@ class World {
     checkPlayerInAttackRange() {
         this.level.enemies.forEach((enemy, index) => {
             if (enemy.isNearby(this.character) && !enemy.isDead()) {
+		
                 if(!enemy.isAttacking()){
                     enemy.currentImage = 0;
                 }
-                console.log(enemy.currentImage)
-                enemy.speed = 0;
-                enemy.attackCooldown--;
-               
-                enemy.attackAnimationCount = 20
 
-                if (enemy.attackCooldown < 0) {
-                    enemy.meleeAttack(this.character);
 
-                }
+                    enemy.speed = 0;
+                    enemy.attackAnimationCount = enemy.initialAttackAnimationCount;
+
+               		if (enemy.attackCooldown < 0) {
+				this.knockbackLeft = this.isEnemyRight(enemy.x + enemy.width/2, this.character.x + this.character.width/2);
+                    		enemy.meleeAttack(this.character);
+		    		this.statusBar.setPercentage(this.character.energy);
+		    		enemy.attackCooldown = enemy.initialAttackCooldown;
+				}
+                
             }
             else {
                 enemy.speed = 0.5;
-                enemy.attackCooldown = 40;
+                enemy.attackCooldown = enemy.initialAttackCooldown;
             }
-
-
-
-
-            //      console.log(enemy.currentImage)
-            //      if(enemy.attackCooldown<0 && enemy.isNearby(this.character)){
-            //           enemy.meleeAttack(this.character);
-            //          enemy.currentImage = 0;
-            //         enemy.attackAnimationCount = 10
-            //        enemy.attackCooldown = 40;
-            //        enemy.speed = 0.15 + Math.random() * 0.5;
-            //  }
-
         });
     }
+
+isEnemyRight(enemyPosition, characterPosition){
+	return enemyPosition > characterPosition;
+}
+
 
     deleteEnemy(enemy, index) {
         if (enemy.isDead() == true) {
             setTimeout(() => {
                 this.level.enemies.splice(index, 1);
-            }, 3000)
+            }, 2000)
         }
     }
 
@@ -111,8 +125,19 @@ class World {
             if (this.character.isColliding(collectable)) {
                 let index = this.collectableArray.indexOf(collectable);
                 this.collectableArray.splice(index, 1);
+		this.character.coins++;
+		this.coinBar.setPercentage(this.character.coins);
             }
         });
+    
+        this.ammoArray.forEach(ammo => {
+            if (this.character.isColliding(ammo)) {
+                let index = this.ammoArray.indexOf(ammo);
+                this.ammoArray.splice(index, 1);
+		this.character.weaponCount++;
+            }
+        });
+
     }
 
     checkThrowObject() {
@@ -176,6 +201,7 @@ class World {
         this.addObjectToMap(this.level.backgroundObjects4);
         this.addObjectToMap(this.throwableObject);
         this.addObjectToMap(this.collectableArray);
+	this.addObjectToMap(this.ammoArray);
 
 
 
@@ -188,7 +214,16 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
         //-----space for fixed objects----//
         this.addToMap(this.statusBar);
-        this.addToMap(this.CoinBar);
+        this.addToMap(this.coinBar);
+	this.ctx.drawImage(this.coinBarImage, 7, 40, 70, 70);
+this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
+this.ctx.font = "35px Arial";
+this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
+
+if(this.character.x > 20){
+this.addToMap(this.endbossHealthBar);
+this.ctx.drawImage(this.endbossImage, 440, 0, 150, 90);
+}
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -210,7 +245,7 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx); //entspricht drawImage() aus drawableObject
-        //mo.drawFrame(this.ctx);
+        mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);

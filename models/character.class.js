@@ -5,7 +5,12 @@ class Character extends MovableObject {
     width = 160;
     speed = 8;
     world;
-    offsetX = 50;
+    offsetX = 40;
+    offsetY = 30;
+    weaponCount = 10;
+    coins = 0;
+    attackRange = 75;
+    meleeDamage = 100;
     imagesWalking = [
         'img/2_character_pepe/2_walk/0_Reaper_Man_Running_000.png',
         'img/2_character_pepe/2_walk/0_Reaper_Man_Running_001.png',
@@ -126,7 +131,7 @@ class Character extends MovableObject {
     ];
 
     walking_sound = new Audio('audio/walking.mp3');
-    weaponCount = 10;
+
 
 
     constructor() {
@@ -139,6 +144,7 @@ class Character extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesHurt);
+//this.x = 650;
         this.applyGravity();
         this.animate();
     }
@@ -163,7 +169,7 @@ class Character extends MovableObject {
                 }
                 if (this.world.keyboard.MELEE && !this.isAttacking()) {
                     this.currentImage = 0;
-                    this.attackAnimationCount = 8;
+                    this.attackAnimationCount = 20;
                     this.world.checkMeleeRange();
                 }
                 if (this.world.keyboard.THROW) {
