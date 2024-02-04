@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'showthat';
+    src: url('fonts/showthat.ttf') format('truetype');
+}
+
 body{
     margin: 0;
     display: flex;
@@ -9,8 +14,53 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    font-family: Showthat;
+    color: red;
+}
+
+h1{
+    font-size: 64px;
+    text-shadow: 7px 8px 6px black;
+}
+
+a{
+    text-decoration: none;
+    font-size: 32px;
+    color: darkred;
+    -webkit-text-stroke: 1px white;
+}
+
+a :hover{
+    transform: scale(1.1);
 }
 
 canvas{
     background-color: black;
+    display: block;
+}
+
+#mobileButtons{
+	width: 680px;
+	display: flex;
+	justify-content: space-between;
+
+}
+
+#keyAssignment{
+	height: 100px;
+	width: 300px;
+	background-color: lightgrey;
+	display: flex;
+}
+
+@media only screen and (max-width: 720px){
+	canvas {
+		width: 100%;
+	}
+}
+
+@media only screen and (max-height: 480px){
+	canvas {
+		height: 100vh;
+	}
 }

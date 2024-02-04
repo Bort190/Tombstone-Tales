@@ -5,8 +5,8 @@ class Chicken extends MovableObject {
     width = 120;
     speed = 0.5;
     offsetX = 15;
-    initialAttackAnimationCount = 7;
-    initialAttackCooldown = 16;
+    initialAttackAnimationCount = 10;
+    initialAttackCooldown = 20;
 
     imagesWalking = [
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png',
@@ -43,11 +43,14 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack3.png',
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack4.png',
         'img/3_enemies_chicken/chicken_normal/4_attack/Attack5.png',
-       // 'img/3_enemies_chicken/chicken_normal/4_attack/Attack6.png',        
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack6.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack7.png',
+        'img/3_enemies_chicken/chicken_normal/4_attack/Attack8.png',
     ];
 
     attackRange = 25;
     meleeDamage = 15;
+    zombieAttack_sound = new Audio('audio/zombieAttack.wav');
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png');
@@ -55,8 +58,8 @@ class Chicken extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesHurt);
         this.loadImages(this.imagesAttack);
-        this.x = 200 + Math.random() * 500;      
-        //this.speed = 0.15 + Math.random() * 0.5;
+        this.x = 200 + Math.random() * 500;
+        this.speed = 0.15 + Math.random() * 0.5;
         this.applyGravity();
         this.animate();
 
@@ -66,17 +69,14 @@ class Chicken extends MovableObject {
     animate() {
         setInterval(() => {
             if (!this.isHurt() && !this.isDead()) {
-                //this.moveLeft();
+                this.moveLeft();
             }
-if(this.x < world.character.x){
-            this.otherDirection = false;
-}
-else{
-this.otherDirection = true;
-}
-
-
-
+            if (this.x < world.character.x) {
+                this.otherDirection = false;
+            }
+            else {
+                this.otherDirection = true;
+            }
             this.checkAttackCooldown()
         }, 1000 / 40)
 
@@ -90,13 +90,14 @@ this.otherDirection = true;
 
                 this.playAnimationOnce(this.imagesDead);
             }
-            else if(this.isAttacking()){
+            else if (this.isAttacking()) {
+                playSound(this.zombieAttack_sound);
                 this.playAnimationOnce(this.imagesAttack);
             }
-            else if (this.isHurt()) {               
-                    this.playAnimationOnce(this.imagesHurt);                               
+            else if (this.isHurt()) {
+                this.playAnimation(this.imagesHurt);
             }
-            else{
+            else {
                 this.playAnimation(this.imagesWalking);
             }
 

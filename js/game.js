@@ -1,10 +1,27 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let audioMute = false;
+
 
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+}
+
+function fullscreen(){
+	world.canvas.requestFullscreen();
+}
+
+function muteAudio(){
+	audioMute = !audioMute;
+	console.log(audioMute)
+}
+
+function playSound(sound){
+	if(!audioMute){
+		sound.play();
+	}
 }
 
 
@@ -30,6 +47,9 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'f':
             keyboard.MELEE = true;
+            break;
+        case 'Shift':
+            keyboard.DASH = true;
             break;
         default:
             break;
@@ -59,6 +79,9 @@ window.addEventListener('keyup', (e) => {
             break;
         case 'f':
             keyboard.MELEE = false;
+            break;
+        case 'Shift':
+            keyboard.DASH = false;
             break;
         default:
             break;

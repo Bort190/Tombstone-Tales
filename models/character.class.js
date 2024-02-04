@@ -8,7 +8,7 @@ class Character extends MovableObject {
     offsetX = 40;
     offsetY = 30;
     weaponCount = 10;
-    coins = 0;
+    coins = 3;
     attackRange = 75;
     meleeDamage = 100;
     imagesWalking = [
@@ -129,8 +129,19 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/0_Reaper_Man_Hurt_010.png',
         'img/2_character_pepe/4_hurt/0_Reaper_Man_Hurt_011.png',
     ];
+    imagesDash = [
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_000.png',
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_001.png',
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_002.png',
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_003.png',
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_004.png',
+        'img/2_character_pepe/8_sliding/0_Reaper_Man_Sliding_005.png'
+    ];
 
-    walking_sound = new Audio('audio/walking.mp3');
+    walking_sound = new Audio('audio/footsteps.wav');
+    attack_sound = new Audio('audio/swoosh.wav');
+    dash_sound = new Audio('audio/dash.wav');
+
 
 
 
@@ -140,13 +151,15 @@ class Character extends MovableObject {
         this.loadImages(this.imagesJumping);
         this.loadImages(this.imagesFalling);
         this.loadImages(this.imagesMelee);
+        this.loadImages(this.imagesDash);
         this.loadImages(this.imagesThrowing);
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesHurt);
-//this.x = 650;
+        //this.x = 650;
         this.applyGravity();
         this.animate();
+        this.walking_sound.playbackRate = 1.4;
     }
 
     animate() {
@@ -156,21 +169,34 @@ class Character extends MovableObject {
                 this.walking_sound.pause();
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isHurt()) {
                     this.moveRight();
-                    //this.walking_sound.play();
+                    if (!this.isAboveGround()) {
+                        playSound(this.walking_sound);
+                    }
+
                 }
                 if (this.world.keyboard.LEFT && this.x > -620 && !this.isHurt()) {
                     this.moveLeft();
-                    //this.walking_sound.play();
+                    if (!this.isAboveGround()) {
+                        playSound(this.walking_sound);
+                    }
                 }
                 if (this.world.keyboard.UP && !this.isAboveGround() || this.world.keyboard.SPACE && !this.isAboveGround()) {
                     if (!this.isHurt()) {
+
                         this.jump();
                     }
                 }
-                if (this.world.keyboard.MELEE && !this.isAttacking()) {
+                if (this.world.keyboard.MELEE && !this.isAttacking() && !this.isAboveGround()) {
                     this.currentImage = 0;
                     this.attackAnimationCount = 20;
+                    playSound(this.attack_sound);
                     this.world.checkMeleeRange();
+                }
+                if (this.world.keyboard.DASH && !this.isDashing() && this.dashCooldown < 0 && this.coins > 0) {
+                    playSound(this.dash_sound);
+                    this.coins--;
+                    this.coinBar.setPercentage(this.character.coins);
+                    this.dash();
                 }
                 if (this.world.keyboard.THROW) {
                     this.world.checkThrowObject();
@@ -200,6 +226,9 @@ class Character extends MovableObject {
             }
             else if (this.isAttacking()) {
                 this.playAnimationOnce(this.imagesMelee);
+            }
+            else if (this.isDashing()) {
+                this.playAnimationOnce(this.imagesDash);
             }
             else if (this.world.keyboard.THROW) {
                 this.playAnimationOnce(this.imagesThrowing);

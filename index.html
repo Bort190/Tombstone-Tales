@@ -24,14 +24,56 @@
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
 
+
 </head>
 
 <body onload="init()">
     <h1>El Pollo Loco</h1>
+    <button id="view-fullscreen" onclick="fullscreen()">Fullscreen</button>
+    <button id="mute" onclick="muteAudio()">Mute Audio</button>
 
     <canvas id="canvas" width="720px" height="480px">
 
     </canvas>
+	<div id="mobileButtons">
+		<div>
+			<button id="leftButton"><=</button>
+			<button id="rightButton">=></button>
+		</div>
+		<div>
+			<button id="leftButton">Jump</button>
+			<button id="rightButton">Attack</button>
+			<button id="rightButton">Throw</button>
+			<button id="rightButton">Dash</button>
+		</div>
+	</div>
+
+	<div id="keyAssignment">
+<table>
+	<tr>
+		<td><img src="img/keyboard_icons/arrow-keys.png"></td>
+		<td>Move Character</td>
+	</tr>
+	<tr>
+		<td><img src="img/keyboard_icons/d-key.png"></td>
+		<td>Throw bone</td>
+	</tr>
+	<tr>
+		<td><img src="img/keyboard_icons/f-key.png"></td>
+		<td>Melee Attack</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td><img src="img/keyboard_icons/shift-key.png"></td>
+		<td>Dash</td>
+	</tr>
+		<tr>
+		<td><img src="img/keyboard_icons/space-key.png"></td>
+		<td>Jump</td>
+	</tr>
+</table>
+	</div>
 
 </body>
 

@@ -6,4 +6,5 @@ class Keyboard {
     SPACE = false;
     THROW = false;
     MELEE = false;
+    DASH = false;
 }

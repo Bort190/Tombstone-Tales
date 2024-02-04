@@ -14,7 +14,10 @@ class MovableObject extends DrawableObject {
     initialAttackCooldown = 10;
     attackCooldown = 0;
     attackAnimationCount = 0;
-    dashLength = 10;
+    dashLength = 0;
+    dashCooldown = 0;
+    hitting_sound = new Audio('audio/hitting.wav');
+
 
 
     playAnimation(images) {
@@ -28,10 +31,10 @@ class MovableObject extends DrawableObject {
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
-        if (i < images.length -1) {
+        if (i < images.length - 1) {
             this.currentImage++;
         }
-        else if(i == images.length -1){
+        else if (i == images.length - 1) {
         }
     }
 
@@ -53,28 +56,34 @@ class MovableObject extends DrawableObject {
     }
 
     dash() {
+        this.currentImage = 0;
+        this.dashLength = 15;
+        const dashInterval = setInterval(() => {
+            if (this.dashLength > 0) {
+                if(!this.otherDirection){this.x += 20;}
+                else{this.x -= 20;}                
+                this.dashLength--;
+            }
+            else {
+                this.dashCooldown = 100;
+                clearInterval(dashInterval);
+            }
+        }, 1000 / 60);
 
-	const dashInterval = setInterval(()=>{
-		if(this.dashLength > 0){
-			this.x += 20;
-			this.dashLength--;
-			  }
-		else{	
-			this.dashLength = 10;
-			clearInterval(dashing);
-		}
-	}, 30);
-
-}
+    }
+    isDashing() {
+        return this.dashLength > 0;
+    }
 
 
     meleeAttack(enemy) {
-if(enemy instanceof Endboss){
- this.hit(enemy, this.meleeDamage, 0, 4);
-}
-else{
-this.hit(enemy, this.meleeDamage, 20, 18);
-}
+        playSound(this.hitting_sound);
+        if (enemy instanceof Endboss) {
+            this.hit(enemy, this.meleeDamage, 0, 4);
+        }
+        else {
+            this.hit(enemy, this.meleeDamage, 20, 18);
+        }
     }
 
     hit(obj, damage, knockbackTime, knockbackHeight) {
@@ -93,16 +102,16 @@ this.hit(enemy, this.meleeDamage, 20, 18);
     knockback(time, height) {
         let knockbackTime = time;
         this.speedY = height;
-	console.log(world.knockbackLeft);
+        console.log(world.knockbackLeft);
         const knockbackInterval = setInterval(() => {
             if (knockbackTime > 0) {
                 if (!world.knockbackLeft) { this.x += 6; }
                 else { this.x -= 6; }
                 knockbackTime--;
             }
-	    else{
-		clearInterval(knockbackInterval)
-		}
+            else {
+                clearInterval(knockbackInterval)
+            }
         }, 1000 / 30);
     }
 
@@ -132,7 +141,6 @@ this.hit(enemy, this.meleeDamage, 20, 18);
         else {
             return this.y + this.height - this.offsetY < 440;
         }
-
     }
 
     isColliding(obj) {
@@ -144,12 +152,13 @@ this.hit(enemy, this.meleeDamage, 20, 18);
 
     isNearby(obj) { //umbenennen, damit die Funktion deutlicher wird
         return (this.x + this.width - this.offsetX + this.attackRange) >= obj.x + obj.offsetX &&
-               (this.x + this.offsetX - this.attackRange ) <= (obj.x + obj.width - obj.offsetX);
+            (this.x + this.offsetX - this.attackRange) <= (obj.x + obj.width - obj.offsetX);
     }
 
     checkAttackCooldown() {
         this.attackAnimationCount--;
         this.attackCooldown--;
+        this.dashCooldown--;
     }
 
     isAttacking() {

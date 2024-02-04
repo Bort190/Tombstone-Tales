@@ -17,14 +17,17 @@ class World {
     ammoArray = [];
     knockbackLeft = false;
 
+    ambient_sound = new Audio('audio/ambient.wav');
+    throw_sound = new Audio('audio/throw.wav');
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-	this.coinBarImage.src = 'img/8_coin/1.png';
-	this.boneImage.src = 'img/6_bones/bottle_rotation/1.png';
-	this.endbossImage.src = 'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png'
+        this.coinBarImage.src = 'img/8_coin/1.png';
+        this.boneImage.src = 'img/6_bones/bottle_rotation/1.png';
+        this.endbossImage.src = 'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png'
         this.draw();
         this.setWorld();
         this.run();
@@ -33,8 +36,10 @@ class World {
     setWorld() {
         this.character.world = this;
         this.setCollectables();
-	this.setAmmo()
-	
+        this.setAmmo();
+        console.log(this.ambient_sound);
+
+
     }
 
     setCollectables() {
@@ -55,13 +60,14 @@ class World {
             this.getCollectable();
             this.checkPlayerInAttackRange();
             this.throwCooldown--;
+            //playSound(this.ambient_sound);
         }, 200);
     }
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy) && !enemy.isDead()) {
-                this.character.hit(this.character, 10, 20, 18);			
+                this.character.hit(this.character, 10, 20, 18);
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
@@ -70,10 +76,12 @@ class World {
     checkMeleeRange() {
         this.level.enemies.forEach((enemy, index) => {
             if (this.character.isNearby(enemy)) {
-                this.character.meleeAttack(enemy)
+                this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
+                this.character.meleeAttack(enemy);
                 this.deleteEnemy(enemy, index);
-		console.log(enemy.energy)
-		this.endbossHealthBar.setPercentage(enemy.energy)
+                if (enemy instanceof Endboss) {
+                    this.endbossHealthBar.setPercentage(enemy.energy)
+                }
             }
         });
     }
@@ -82,22 +90,17 @@ class World {
     checkPlayerInAttackRange() {
         this.level.enemies.forEach((enemy, index) => {
             if (enemy.isNearby(this.character) && !enemy.isDead()) {
-		
-                if(!enemy.isAttacking()){
+                if (!enemy.isAttacking()) {
                     enemy.currentImage = 0;
                 }
-
-
-                    enemy.speed = 0;
-                    enemy.attackAnimationCount = enemy.initialAttackAnimationCount;
-
-               		if (enemy.attackCooldown < 0) {
-				this.knockbackLeft = this.isEnemyRight(enemy.x + enemy.width/2, this.character.x + this.character.width/2);
-                    		enemy.meleeAttack(this.character);
-		    		this.statusBar.setPercentage(this.character.energy);
-		    		enemy.attackCooldown = enemy.initialAttackCooldown;
-				}
-                
+                enemy.speed = 0;
+                enemy.attackAnimationCount = enemy.initialAttackAnimationCount;
+                if (enemy.attackCooldown < 0) {
+                    this.knockbackLeft = this.isEnemyRight(enemy.x + enemy.width / 2, this.character.x + this.character.width / 2);
+                    enemy.meleeAttack(this.character);
+                    this.statusBar.setPercentage(this.character.energy);
+                    enemy.attackCooldown = enemy.initialAttackCooldown;
+                }
             }
             else {
                 enemy.speed = 0.5;
@@ -106,9 +109,9 @@ class World {
         });
     }
 
-isEnemyRight(enemyPosition, characterPosition){
-	return enemyPosition > characterPosition;
-}
+    isEnemyRight(enemyPosition, characterPosition) {
+        return enemyPosition > characterPosition;
+    }
 
 
     deleteEnemy(enemy, index) {
@@ -125,16 +128,16 @@ isEnemyRight(enemyPosition, characterPosition){
             if (this.character.isColliding(collectable)) {
                 let index = this.collectableArray.indexOf(collectable);
                 this.collectableArray.splice(index, 1);
-		this.character.coins++;
-		this.coinBar.setPercentage(this.character.coins);
+                this.character.coins++;
+                this.coinBar.setPercentage(this.character.coins);
             }
         });
-    
+
         this.ammoArray.forEach(ammo => {
             if (this.character.isColliding(ammo)) {
                 let index = this.ammoArray.indexOf(ammo);
                 this.ammoArray.splice(index, 1);
-		this.character.weaponCount++;
+                this.character.weaponCount++;
             }
         });
 
@@ -145,18 +148,20 @@ isEnemyRight(enemyPosition, characterPosition){
 
             if (!this.character.otherDirection) {
                 let bone = new ThrowableObject(this.character.x + 100, this.character.y + 100, 1);
-                this.throwableObject.push(bone);
-                this.throwCooldown = 8;
-                this.checkForHit(bone);
+                this.hitWithThrowingObject(bone)
             }
             else {
                 let bone = new ThrowableObject(this.character.x - 20, this.character.y + 100, -1);
-                this.throwableObject.push(bone);
-                this.throwCooldown = 8;
-                this.checkForHit(bone);
+                this.hitWithThrowingObject(bone)
             }
         }
+    }
 
+    hitWithThrowingObject(bone) {
+        playSound(this.throw_sound);
+        this.throwableObject.push(bone);
+        this.throwCooldown = 8;
+        this.checkForHit(bone);
     }
 
     checkForHit(bone) {
@@ -166,6 +171,7 @@ isEnemyRight(enemyPosition, characterPosition){
             this.level.enemies.forEach((enemy) => {
                 if (bone.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
                     bone.hit(enemy, 5, 5, 9)
+                    this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
                     this.throwableObject.splice(index, 1);
                     deleteCounter = 0;
                 }
@@ -201,7 +207,7 @@ isEnemyRight(enemyPosition, characterPosition){
         this.addObjectToMap(this.level.backgroundObjects4);
         this.addObjectToMap(this.throwableObject);
         this.addObjectToMap(this.collectableArray);
-	this.addObjectToMap(this.ammoArray);
+        this.addObjectToMap(this.ammoArray);
 
 
 
@@ -215,15 +221,15 @@ isEnemyRight(enemyPosition, characterPosition){
         //-----space for fixed objects----//
         this.addToMap(this.statusBar);
         this.addToMap(this.coinBar);
-	this.ctx.drawImage(this.coinBarImage, 7, 40, 70, 70);
-this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
-this.ctx.font = "35px Arial";
-this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
+        this.ctx.drawImage(this.coinBarImage, 7, 40, 70, 70);
+        this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
+        this.ctx.font = "35px Arial";
+        this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
 
-if(this.character.x > 20){
-this.addToMap(this.endbossHealthBar);
-this.ctx.drawImage(this.endbossImage, 440, 0, 150, 90);
-}
+        if (this.character.x > 20) {
+            this.addToMap(this.endbossHealthBar);
+            this.ctx.drawImage(this.endbossImage, 440, 0, 150, 90);
+        }
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -245,7 +251,7 @@ this.ctx.drawImage(this.endbossImage, 440, 0, 150, 90);
             this.flipImage(mo);
         }
         mo.draw(this.ctx); //entspricht drawImage() aus drawableObject
-        mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
