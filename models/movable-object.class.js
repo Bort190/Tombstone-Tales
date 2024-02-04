@@ -38,6 +38,15 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    move() {
+        if (this.x > world.character.x) {
+            this.moveLeft()
+        }
+        else {
+            this.moveRight()
+        }
+    }
+
     moveRight() {
         this.x += this.speed;
         this.otherDirection = false;
@@ -60,8 +69,8 @@ class MovableObject extends DrawableObject {
         this.dashLength = 15;
         const dashInterval = setInterval(() => {
             if (this.dashLength > 0) {
-                if(!this.otherDirection){this.x += 20;}
-                else{this.x -= 20;}                
+                if (!this.otherDirection) { this.x += 20; }
+                else { this.x -= 20; }
                 this.dashLength--;
             }
             else {
@@ -93,7 +102,7 @@ class MovableObject extends DrawableObject {
             if (obj.energy <= 0) {
                 obj.energy = 0;
             } else {
-                obj.lastHit = new Date().getTime();
+                obj.lastHit = 60;
             }
             obj.knockback(knockbackTime, knockbackHeight);
         }
@@ -125,9 +134,7 @@ class MovableObject extends DrawableObject {
     }
 
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit;
-        timepassed /= 1000;
-        return timepassed < 2;
+       return this.lastHit > 0;
     }
 
     isDead() {
@@ -159,6 +166,7 @@ class MovableObject extends DrawableObject {
         this.attackAnimationCount--;
         this.attackCooldown--;
         this.dashCooldown--;
+        this.lastHit--;
     }
 
     isAttacking() {

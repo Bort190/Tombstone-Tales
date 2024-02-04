@@ -63,20 +63,16 @@ class Chicken extends MovableObject {
         this.applyGravity();
         this.animate();
 
+
     }
 
 
     animate() {
         setInterval(() => {
             if (!this.isHurt() && !this.isDead()) {
-                this.moveLeft();
+                this.move();
             }
-            if (this.x < world.character.x) {
-                this.otherDirection = false;
-            }
-            else {
-                this.otherDirection = true;
-            }
+
             this.checkAttackCooldown()
         }, 1000 / 40)
 
@@ -87,7 +83,6 @@ class Chicken extends MovableObject {
                     this.width = 190;
                     this.height = 120;
                 }, 800);
-
                 this.playAnimationOnce(this.imagesDead);
             }
             else if (this.isAttacking()) {

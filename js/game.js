@@ -7,22 +7,24 @@ let audioMute = false;
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    
 }
 
-function fullscreen(){
-	world.canvas.requestFullscreen();
+function fullscreen() {
+    world.canvas.requestFullscreen();
 }
 
-function muteAudio(){
-	audioMute = !audioMute;
-	console.log(audioMute)
+
+function muteAudio() {
+    audioMute = !audioMute;
 }
 
-function playSound(sound){
-	if(!audioMute){
-		sound.play();
-	}
+function playSound(sound) {
+    if (!audioMute) {
+        sound.play();
+    }
 }
+
 
 
 window.addEventListener('keydown', (e) => {
@@ -54,7 +56,6 @@ window.addEventListener('keydown', (e) => {
         default:
             break;
     }
-
 })
 
 window.addEventListener('keyup', (e) => {
@@ -86,5 +87,53 @@ window.addEventListener('keyup', (e) => {
         default:
             break;
     }
+});
 
+document.getElementById("leftButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.LEFT = true;
+})
+document.getElementById("leftButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.LEFT = false;
+})
+document.getElementById("rightButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = true;
+})
+document.getElementById("rightButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.RIGHT = false;
+})
+document.getElementById("jumpButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.UP = true;
+})
+document.getElementById("jumpButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.UP = false;
+})
+document.getElementById("attackButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.MELEE = true;
+})
+document.getElementById("attackButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.MELEE = false;
+})
+document.getElementById("throwButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.THROW = true;
+})
+document.getElementById("throwButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.THROW = false;
+})
+document.getElementById("dashButton").addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    keyboard.DASH = true;
+})
+document.getElementById("dashButton").addEventListener("touchend", (e) => {
+    e.preventDefault();
+    keyboard.DASH = false;
 })

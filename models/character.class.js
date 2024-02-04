@@ -1,6 +1,7 @@
 class Character extends MovableObject {
 
     y = 70;
+    x = 100;
     height = 230;
     width = 160;
     speed = 8;
@@ -8,7 +9,7 @@ class Character extends MovableObject {
     offsetX = 40;
     offsetY = 30;
     weaponCount = 10;
-    coins = 3;
+    coins = 5;
     attackRange = 75;
     meleeDamage = 100;
     imagesWalking = [
@@ -156,7 +157,6 @@ class Character extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesHurt);
-        //this.x = 650;
         this.applyGravity();
         this.animate();
         this.walking_sound.playbackRate = 1.4;
@@ -172,7 +172,6 @@ class Character extends MovableObject {
                     if (!this.isAboveGround()) {
                         playSound(this.walking_sound);
                     }
-
                 }
                 if (this.world.keyboard.LEFT && this.x > -620 && !this.isHurt()) {
                     this.moveLeft();
@@ -182,7 +181,6 @@ class Character extends MovableObject {
                 }
                 if (this.world.keyboard.UP && !this.isAboveGround() || this.world.keyboard.SPACE && !this.isAboveGround()) {
                     if (!this.isHurt()) {
-
                         this.jump();
                     }
                 }
@@ -195,7 +193,7 @@ class Character extends MovableObject {
                 if (this.world.keyboard.DASH && !this.isDashing() && this.dashCooldown < 0 && this.coins > 0) {
                     playSound(this.dash_sound);
                     this.coins--;
-                    this.coinBar.setPercentage(this.character.coins);
+                    world.coinBar.setPercentage(this.coins);
                     this.dash();
                 }
                 if (this.world.keyboard.THROW) {
