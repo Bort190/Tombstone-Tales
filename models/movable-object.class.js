@@ -134,7 +134,7 @@ class MovableObject extends DrawableObject {
     }
 
     isHurt() {
-       return this.lastHit > 0;
+        return this.lastHit > 0;
     }
 
     isDead() {

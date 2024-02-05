@@ -58,6 +58,11 @@ class World {
             this.checkPlayerInAttackRange();
             this.throwCooldown--;
             playSound(this.ambient_sound);
+            if (this.character.isDead()) {
+                setInterval(() => {
+                    window.location = 'endscreen.html';
+                }, 2000);
+            }
         }, 200);
     }
 
@@ -72,7 +77,7 @@ class World {
 
     checkMeleeRange() {
         this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isNearby(enemy)) {
+            if (this.character.isNearby(enemy) && !enemy.isDead()) {
                 this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
                 this.character.meleeAttack(enemy);
                 this.deleteEnemy(enemy, index);
@@ -119,7 +124,7 @@ class World {
         if (enemy.isDead() == true) {
             setTimeout(() => {
                 this.level.enemies.splice(index, 1);
-            }, 1500)
+            }, 2000)
         }
     }
 
@@ -214,7 +219,8 @@ class World {
         this.addToMap(this.coinBar);
         this.ctx.drawImage(this.coinBarImage, 7, 40, 70, 70);
         this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
-        this.ctx.font = "35px Arial";
+        this.ctx.font = "bold 35px Showthat";
+        this.ctx.strokeStyle = "darkred";
         this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
         if (this.character.x > 2800) {
             this.addToMap(this.endbossHealthBar);

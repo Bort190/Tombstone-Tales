@@ -8,7 +8,11 @@ class Endboss extends MovableObject {
     offsetY = 50;
     initialAttackAnimationCount = 7;
     initialAttackCooldown = 10;
-    hurtTime = 20;
+    hurtTime = 15;
+    meleeDamage = 100;
+    firstContact = true;
+    boss_attack_sound = new Audio('audio/bossAttack.wav');
+    boss_taunt_sound = new Audio('audio/bossTaunt.wav');
 
     imagesIdle = [
         'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png',
@@ -52,35 +56,85 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/4_hurt/Wraith_01_Hurt_010.png',
         'img/4_enemie_boss_chicken/4_hurt/Wraith_01_Hurt_011.png'
     ];
+    imagesTaunt = [
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_000.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_001.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_002.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_003.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_004.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_005.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_006.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_007.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_008.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_009.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_010.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_011.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_012.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_013.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_014.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_015.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_016.png',
+        'img/4_enemie_boss_chicken/2_alert/Wraith_01_Taunt_017.png',
+    ];
+    imagesDead = [
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_000.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_001.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_002.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_003.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_004.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_005.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_006.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_007.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_008.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_009.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_010.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_011.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_012.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_013.png',
+        'img/4_enemie_boss_chicken/5_dead/Wraith_01_Dying_014.png',
+    ];
 
     constructor() {
         super().loadImage(this.imagesIdle[0]);
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesAttack);
         this.loadImages(this.imagesHurt);
+        this.loadImages(this.imagesTaunt);
+        this.loadImages(this.imagesDead);
         this.x = 3000;
         this.animate();
-	this.applyGravity();
+        this.applyGravity();
         this.otherDirection = true;
-
     }
 
     animate() {
         setInterval(() => {
-	    this.checkAttackCooldown()
-            if(this.isHurt()){
-                this.playAnimationOnce(this.imagesHurt);  
-
-}
-	    else if(this.isAttacking()){
-                this.playAnimationOnce(this.imagesAttack);
-            
-
+            this.checkAttackCooldown()
+            if (this.isDead()) {
+                this.playAnimationOnce(this.imagesDead);
             }
-        else{
-		this.playAnimation(this.imagesIdle);
-	    }
-	        
+            else if (this.isHurt()) {
+                this.playAnimationOnce(this.imagesHurt);
+            }
+            else if (this.isAttacking()) {
+                this.playAnimationOnce(this.imagesAttack);
+            }
+            else if (this.imagesTaunt && world.character.x > 2800) {
+                this.taunt();
+            }
+            else {
+                this.playAnimation(this.imagesIdle);
+            }
         }, 120)
     }
+
+    taunt(){
+            this.playAnimation(this.imagesTaunt);
+            playSound(this.boss_taunt_sound);
+            setTimeout(() => {
+               this.imagesTaunt = false; 
+            }, 1000);
+            
+    }
+
 }
