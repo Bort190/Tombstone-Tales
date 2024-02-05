@@ -16,13 +16,25 @@ function fullscreen() {
 
 
 function muteAudio() {
-    audioMute = !audioMute;
+	let muteButton = document.getElementById("muteUnmuteButton");
+	if(audioMute){
+		audioMute = false;
+		muteButton.src = "img/mobileButtons/muteIcon.png";
+	}
+	else if(!audioMute){
+		audioMute = true;
+		muteButton.src = "img/mobileButtons/unMuteIcon.png";
+	}
+	console.log(audioMute)
 }
 
 function playSound(sound) {
     if (!audioMute) {
         sound.play();
     }
+else{
+	sound.pause();	
+}
 }
 
 

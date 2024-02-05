@@ -8,6 +8,7 @@ class Endboss extends MovableObject {
     offsetY = 50;
     initialAttackAnimationCount = 7;
     initialAttackCooldown = 10;
+    hurtTime = 20;
 
     imagesIdle = [
         'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png',
@@ -57,7 +58,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesAttack);
         this.loadImages(this.imagesHurt);
-        this.x = 300;
+        this.x = 3000;
         this.animate();
 	this.applyGravity();
         this.otherDirection = true;
@@ -80,6 +81,6 @@ class Endboss extends MovableObject {
 		this.playAnimation(this.imagesIdle);
 	    }
 	        
-        }, 200)
+        }, 120)
     }
 }

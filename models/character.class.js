@@ -12,6 +12,7 @@ class Character extends MovableObject {
     coins = 5;
     attackRange = 75;
     meleeDamage = 100;
+    hurtTime = 60;
     imagesWalking = [
         'img/2_character_pepe/2_walk/0_Reaper_Man_Running_000.png',
         'img/2_character_pepe/2_walk/0_Reaper_Man_Running_001.png',
@@ -167,13 +168,13 @@ class Character extends MovableObject {
         setInterval(() => {
             if (!this.isDead()) {
                 this.walking_sound.pause();
-                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isHurt()) {
+                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     this.moveRight();
                     if (!this.isAboveGround()) {
                         playSound(this.walking_sound);
                     }
                 }
-                if (this.world.keyboard.LEFT && this.x > -620 && !this.isHurt()) {
+                if (this.world.keyboard.LEFT && this.x > -620) {
                     this.moveLeft();
                     if (!this.isAboveGround()) {
                         playSound(this.walking_sound);

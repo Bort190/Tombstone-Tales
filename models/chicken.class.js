@@ -3,10 +3,10 @@ class Chicken extends MovableObject {
     y = 200;
     height = 150;
     width = 120;
-    speed = 0.5;
     offsetX = 15;
     initialAttackAnimationCount = 10;
     initialAttackCooldown = 20;
+    hurtTime = 35;
 
     imagesWalking = [
         'img/3_enemies_chicken/chicken_normal/1_walk/Walk1.png',
@@ -58,8 +58,8 @@ class Chicken extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesHurt);
         this.loadImages(this.imagesAttack);
-        this.x = 200 + Math.random() * 500;
-        this.speed = 0.15 + Math.random() * 0.5;
+        this.x = 200 + Math.random() * 3000;
+        this.speed = 0.15 + Math.random() * 1;
         this.applyGravity();
         this.animate();
 

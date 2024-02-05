@@ -102,7 +102,7 @@ class MovableObject extends DrawableObject {
             if (obj.energy <= 0) {
                 obj.energy = 0;
             } else {
-                obj.lastHit = 60;
+                obj.lastHit = obj.hurtTime;
             }
             obj.knockback(knockbackTime, knockbackHeight);
         }

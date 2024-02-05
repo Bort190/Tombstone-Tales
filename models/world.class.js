@@ -86,7 +86,7 @@ class World {
 
     checkPlayerInAttackRange() {
         this.level.enemies.forEach((enemy, index) => {
-            if (enemy.isNearby(this.character) && !enemy.isDead()) {
+            if (enemy.isNearby(this.character) && !enemy.isDead() && !enemy.isHurt()) {
                 if (!enemy.isAttacking()) {
                     enemy.currentImage = 0;
                 }
@@ -97,7 +97,7 @@ class World {
                 }
             }
             else {
-                enemy.speed = 0.5;
+                enemy.speed = 0.15 + Math.random() * 1;
                 enemy.attackCooldown = enemy.initialAttackCooldown;
             }
         });
@@ -119,7 +119,7 @@ class World {
         if (enemy.isDead() == true) {
             setTimeout(() => {
                 this.level.enemies.splice(index, 1);
-            }, 2000)
+            }, 1500)
         }
     }
 
@@ -216,7 +216,7 @@ class World {
         this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
         this.ctx.font = "35px Arial";
         this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
-        if (this.character.x > 20) {
+        if (this.character.x > 2800) {
             this.addToMap(this.endbossHealthBar);
             this.ctx.drawImage(this.endbossImage, 440, 0, 150, 90);
         }

@@ -19,7 +19,7 @@ class CoinBar extends DrawableObject {
         this.y = 40;
         this.height = 60;
         this.width = 200;
-        this.setPercentage(0);
+        this.setPercentage(5);
 
     }
 
