@@ -39,7 +39,7 @@ class MovableObject extends DrawableObject {
     }
 
     move() {
-        if (this.x > world.character.x) {
+        if (this.x + this.width / 2 > world.character.x) {
             this.moveLeft()
         }
         else {
@@ -86,7 +86,7 @@ class MovableObject extends DrawableObject {
 
 
     meleeAttack(enemy) {
-        playSound(this.hitting_sound);
+        
         if (enemy instanceof Endboss) {
             this.hit(enemy, this.meleeDamage, 0, 4);
         }
@@ -96,6 +96,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit(obj, damage, knockbackTime, knockbackHeight) {
+        playSound(this.hitting_sound);
         if (!obj.isHurt()) {
             obj.currentImage = 0;
             obj.energy -= damage;
@@ -128,6 +129,9 @@ class MovableObject extends DrawableObject {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
+                if (this.y + this.height - this.offsetY > 440 && !(this instanceof ThrowableObject)) {
+                    this.y = 440 - this.height + this.offsetY
+                }
                 this.speedY -= this.acceleration;
             }
         }, 1000 / 30);

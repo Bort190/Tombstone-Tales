@@ -11,7 +11,7 @@
 	<script src="models/movable-object.class.js"></script>
 	<script src="models/world.class.js"></script>
 	<script src="models/character.class.js"></script>
-	<script src="models/chicken.class.js"></script>
+	<script src="models/zombie.class.js"></script>
 	<script src="models/throwable-object.class.js"></script>
 	<script src="models/status-bar.class.js"></script>
 	<script src="models/coin-bar.class.js"></script>
@@ -28,7 +28,7 @@
 
 <body onload="init()">
 	<h1>Tombstone Tales</h1>
-	<!-- <button id="view-fullscreen" onclick="fullscreen()">Fullscreen</button> -->
+
 
 
 	<canvas id="canvas" width="720px" height="480px">
@@ -58,7 +58,15 @@
 		</div>
 	</div>
 
-	<div id="keyAssignment">
+	<div class="d-flex">
+		<button id="view-fullscreen" onclick="fullscreen()"><img id="fullscreenbutton" class="mobileButtonImg"
+				src="img/mobileButtons/fullscreen.png"></button>
+		<button id="mute-fullscreen" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
+				src="img/mobileButtons/muteIcon.png"></button>
+
+	</div>
+
+	<div id="keyAssignment" class="d-none">
 		<table>
 			<tr>
 				<td><img src="img/keyboard_icons/arrow-keys.png"></td>

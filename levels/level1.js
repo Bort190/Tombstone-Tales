@@ -1,12 +1,17 @@
 const level1 = new Level([
-     //new Chicken(),
-    // new Chicken(),
-     //new Chicken(),
-     new Endboss()
+    new Zombie(0.75),
+    new Zombie(1.75),
+    new Zombie(2.4),
+    new Endboss()
 ],
     [
-        new Cloud('img/5_background/layers/4_clouds/1.png'),
-        new Cloud('img/5_background/layers/4_clouds/2.png')
+        new Cloud('img/5_background/layers/graveyard/3.png', 0.1),
+        new Cloud('img/5_background/layers/4_clouds/1.png', 0.5),
+        new Cloud('img/5_background/layers/4_clouds/2.png', 0.8),
+        new Cloud('img/5_background/layers/4_clouds/1.png', 0.6),
+        new Cloud('img/5_background/layers/4_clouds/2.png', 0.9),
+        new Cloud('img/5_background/layers/4_clouds/1.png', 1),
+        new Cloud('img/5_background/layers/4_clouds/2.png', 0.75),
     ],
     [
         new Collectable('img/8_coin/1.png')
@@ -46,5 +51,16 @@ const level1 = new Level([
         new BackgroundObject('img/5_background/layers/graveyard/6.png', 719 * 3),
         new BackgroundObject('img/5_background/layers/graveyard/6.png', 719 * 4),
         new BackgroundObject('img/5_background/layers/graveyard/6.png', 719 * 5),
+    ],
+    [
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', -719 * 2),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', -719),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 0),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719 * 2),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719 * 3),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719 * 4),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719 * 5),
+        new BackgroundObject('img/5_background/layers/graveyard/9.png', 719 * 6),
     ]
 );

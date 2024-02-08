@@ -16,6 +16,8 @@ class World {
     collectableArray = [];
     ammoArray = [];
     knockbackLeft = false;
+    throwDeleteCounter = 0;
+
 
     ambient_sound = new Audio('audio/ambient.wav');
     throw_sound = new Audio('audio/throw.wav');
@@ -27,7 +29,7 @@ class World {
         this.keyboard = keyboard;
         this.coinBarImage.src = 'img/8_coin/1.png';
         this.boneImage.src = 'img/6_bones/bottle_rotation/1.png';
-        this.endbossImage.src = 'img/4_enemie_boss_chicken/6_idle/Wraith_01_Idle_000.png'
+        this.endbossImage.src = 'img/4_enemie_boss/6_idle/Wraith_01_Idle_000.png'
         this.draw();
         this.setWorld();
         this.run();
@@ -41,13 +43,13 @@ class World {
 
     setCollectables() {
         for (let i = 0; i < 6; i++) {
-            this.collectableArray.push(new Collectable('img/8_coin/1.png', 'skull', 80));
+            this.collectableArray.push(new Collectable('img/8_coin/1.png', 'skull', 80, i));
         }
     }
 
     setAmmo() {
         for (let i = 0; i < 6; i++) {
-            this.ammoArray.push(new Collectable('img/6_bones/bottle_rotation/1.png', 'bone', 65));
+            this.ammoArray.push(new Collectable('img/6_bones/bottle_rotation/1.png', 'bone', 65, i));
         }
     }
 
@@ -63,12 +65,14 @@ class World {
                     window.location = 'endscreen.html';
                 }, 2000);
             }
+            console.log(this.throwDeleteCounter)
         }, 200);
     }
 
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isDashing()) {
+                this.knockbackLeft = this.isEnemyRight(enemy.x + enemy.width / 2, this.character.x + this.character.width / 2);
                 this.character.hit(this.character, 10, 20, 18);
                 this.statusBar.setPercentage(this.character.energy);
             }
@@ -76,11 +80,11 @@ class World {
     }
 
     checkMeleeRange() {
-        this.level.enemies.forEach((enemy, index) => {
+        this.level.enemies.forEach((enemy) => {
             if (this.character.isNearby(enemy) && !enemy.isDead()) {
                 this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
                 this.character.meleeAttack(enemy);
-                this.deleteEnemy(enemy, index);
+                this.deleteEnemy(enemy);
                 if (enemy instanceof Endboss) {
                     this.endbossHealthBar.setPercentage(enemy.energy)
                 }
@@ -120,10 +124,16 @@ class World {
     }
 
 
-    deleteEnemy(enemy, index) {
+    deleteEnemy(enemy) {
         if (enemy.isDead() == true) {
             setTimeout(() => {
+                let index = this.level.enemies.indexOf(enemy);
                 this.level.enemies.splice(index, 1);
+                if (enemy instanceof Endboss) {
+                    setInterval(() => {
+                        window.location = 'winscreen.html';
+                    }, 2000);
+                }
             }, 2000)
         }
     }
@@ -161,40 +171,43 @@ class World {
         }
     }
 
-    hitWithThrowingObject(bone) {
+    hitWithThrowingObject(obj) {
         playSound(this.throw_sound);
-        this.throwableObject.push(bone);
-        this.throwCooldown = 8;
-        this.checkForHit(bone);
+        this.throwDeleteCounter = 0;
+        this.throwableObject.push(obj);
+        let index = this.throwableObject.indexOf(obj);
+        this.throwCooldown = 10;
+        this.checkForHit(this.throwableObject[index], index);
     }
 
-    checkForHit(bone) {
-        let deleteCounter = 0;
-        setInterval(() => {
-            let index = this.throwableObject.indexOf(bone);
+    checkForHit(obj, index) {
+        let throwInterval = setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                this.damageEnemywithBone(index, bone, enemy, deleteCounter);
+                this.damageEnemywithBone(obj, enemy, index, throwInterval);
             })
         }, 100);
     }
 
-    damageEnemywithBone(index, bone, enemy, deleteCounter) {
-        if (bone.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
-            bone.hit(enemy, 5, 5, 9)
+    damageEnemywithBone(obj, enemy, index, throwInterval) {
+        
+        if (obj.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
+            obj.hit(enemy, 75, 5, 9)
             this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
-            this.deleteThrowableObject(index, deleteCounter)
+            this.deleteThrowableObject(index, throwInterval)
+            this.deleteEnemy(enemy);
         }
-        else if (deleteCounter > 80) {
-            this.deleteThrowableObject(index, deleteCounter)
+        else if (this.throwDeleteCounter > 40) {
+            this.deleteThrowableObject(index, throwInterval)
         }
-        else {
-            deleteCounter++
+        else{
+            this.throwDeleteCounter++;
         }
     }
 
-    deleteThrowableObject(index, deleteCounter) {
+    deleteThrowableObject(index, throwInterval) {
         this.throwableObject.splice(index, 1);
-        deleteCounter = 0;
+        clearInterval(throwInterval);
+        this.throwDeleteCounter = 0;
     }
 
 
@@ -236,9 +249,12 @@ class World {
         this.addObjectToMap(this.throwableObject);
         this.addObjectToMap(this.collectableArray);
         this.addObjectToMap(this.ammoArray);
+        this.addObjectToMap(this.level.clouds);
         this.addToMap(this.character);
         this.addObjectToMap(this.level.enemies);
-        this.addObjectToMap(this.level.clouds);
+        this.ctx.translate(this.camera_x * 0.15, 0);
+        this.addObjectToMap(this.level.backgroundObjects5);
+        this.ctx.translate(-this.camera_x * 0.15, 0);
         this.setFixedObjects();
         this.ctx.translate(-this.camera_x, 0);
         let self = this;

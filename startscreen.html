@@ -8,16 +8,58 @@
     <link rel="icon" type="image/x-icon" href="img/8_coin/1.png">
     <link rel="stylesheet" href="style.css">
 
+
+
 </head>
 
 <body>
     <h1>Tombstone Tales</h1>
     <div id="titleScreen">
         <a href="index.html">
-            <h2>Spiel starten</h2>
+            <h2>START GAME</h2>
         </a>
+	<a href="#" onclick="openControls()">
+	    <h3>CONTROLS</h3>
+	</a>
     </div>
+<div onclick="closeControls()" id="keyAssignmentContainer" class="d-none">
+	<div id="keyAssignment">
+		<div id="description">
+			
+				<p>Use the Arrow-keys to control the Character.</p>
+				<p>Use "F" for a melee attack.</p>
+				<p>Collect the bones and use "D" to throw them.</p>
+				<p>Collect the skulls and use "Shift" to dash with the Character.</p>
+			
+		</div>	
+		<div id="controlsContainer">
 
+			<div class="controls">
+				<td><img src="img/keyboard_icons/arrow-keys.png"></td>
+				<td>Move Character</td>
+			</div>
+			<div class="controls">
+				<td><img src="img/keyboard_icons/d-key.png"></td>
+				<td>Throw bone</td>
+			</div>
+			<div class="controls">
+				<td><img src="img/keyboard_icons/f-key.png"></td>
+				<td>Melee Attack</td>
+			</div class="controls">
+
+			<div class="controls">
+				<td><img src="img/keyboard_icons/shift-key.png"></td>
+				<td>Dash</td>
+			</div>
+			<div class="controls">
+				<td><img src="img/keyboard_icons/space-key.png"></td>
+				<td>Jump</td>
+			</div>
+
+		</div>
+	</div>
+</div>
+	<script src="js/game.js"></script>
 </body>
 
 </html>

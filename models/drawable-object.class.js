@@ -7,7 +7,7 @@ class DrawableObject {
     currentImage = 0;
     imageCache = {};
 
- 
+
 
     loadImage(path) {
         this.img = new Image();
@@ -27,17 +27,17 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
+        if (this instanceof Character || this instanceof Zombie || this instanceof Endboss) {
             ctx.beginPath();
             ctx.linewidth = '5';
             ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width- this.offsetX, this.height - this.offsetY);
+            ctx.rect(this.x, this.y, this.width - this.offsetX, this.height - this.offsetY);
             ctx.stroke();
             ctx.beginPath();
             ctx.linewidth = '5';
             ctx.strokeStyle = 'red';
             ctx.rect(this.x, this.y, this.width - this.offsetX + this.attackRange, this.height);
-	    ctx.stroke();
+            ctx.stroke();
         }
     }
 

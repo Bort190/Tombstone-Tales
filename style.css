@@ -3,10 +3,24 @@
     src: url('fonts/showthat.ttf') format('truetype');
 }
 
+p {
+    font-size: 15px;
+}
+
 .mobileButtonImg {
     height: 35px;
     width: 35px;
 
+}
+
+.d-none {
+    display: none !IMPORTANT;
+}
+
+#clickable {
+    height: 100px;
+    width: 100px;
+    background-color: black;
 }
 
 .mobileButtons {
@@ -17,12 +31,12 @@
     background-color: rgba(175, 170, 170, 0.856);
 }
 
-.muteButtonContainer{
+.muteButtonContainer {
     display: flex;
     justify-content: flex-end;
 }
 
-.mobileButtonsContainer{
+.mobileButtonsContainer {
     width: 720px;
     height: 480px;
     position: absolute;
@@ -31,21 +45,21 @@
     justify-content: space-between;
 }
 
-.actionButtons{
-	display: flex;
-	justify-content: space-between;
+.actionButtons {
+    display: flex;
+    justify-content: space-between;
 }
 
-.leftButtons{
-display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-end;
+.leftButtons {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
 }
 
-.rightButtons{
-display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap-reverse;
+.rightButtons {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap-reverse;
 }
 
 body {
@@ -68,6 +82,12 @@ h1 {
     text-shadow: 7px 8px 6px black;
 }
 
+.d-flex{
+    width: 700px;
+
+}
+
+
 a {
     text-decoration: none;
     font-size: 32px;
@@ -75,7 +95,25 @@ a {
     -webkit-text-stroke: 1px white;
 }
 
-a :hover {
+#view-fullscreen{
+    padding: 8px;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #a5a5a577;
+    font-family: 'showthat';
+    margin-right: 20px;
+}
+#view-fullscreen:hover, #mute-fullscreen:hover{
+    background-color: #5c5c5c;
+    cursor: pointer;
+
+}
+
+a h2:hover,
+h3:hover {
     transform: scale(1.1);
 }
 
@@ -85,53 +123,103 @@ canvas {
     display: block;
 }
 
-
+#keyAssignmentContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #312f2fb0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 #keyAssignment {
-    height: 300px;
-    width: 400px;
-    background-color: lightgrey;
+    height: 350px;
+    width: 600px;
+    border-radius: 30px;
+    padding: 50px;
+    background-color: #b0b0b0;
+    border: 3px solid black;
+    box-shadow: 8px 6px 7px #7b7b7b;
+    color: #791e1e;
+    margin: 0 30px;
+
+
+}
+#mute-fullscreen {
+    border-radius: 50%;
+    padding: 10px;
+    background-color: #a5a5a577;
+    color: white;
+}
+
+#controlsContainer {
     display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
 }
 
 @media only screen and (max-width: 720px) {
-    h1{
+    h1 {
         display: none;
     }
-    
+
     canvas {
         width: 100%;
     }
-    #keyAssignment{
-        display: none;
-    }
-    .mobileButtonsContainer{
-	display: flex;
+
+    .mobileButtonsContainer {
+        display: flex;
         height: 100vh;
-	width: 100%;
+        width: 100%;
     }
-    body {
-        background-image: none;
-	background-color: black;
-    }    
 }
 
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
     }
-    #keyAssignment{
+
+    h1, #mute-fullscreen, #view-fullscreen {
         display: none;
     }
-    h1{
-        display: none;
-    }
-    .mobileButtonsContainer{
-	display: flex;
+
+
+    .mobileButtonsContainer {
+        display: flex;
         height: 100vh;
     }
-    body {
-        background-image: none;
-	background-color: black;
+}
+
+@media only screen and (max-width: 480px) {
+
+    #keyAssignment div,
+    #keyAssignment p,
+    #keyAssignment {
+        padding: 5px;
+        font-size: 12px;
+
+    }
+
+    .controls img {
+        width: 30px;
+        height: 30px;
+    }
+
+    #controlsContainer {
+
+        gap: 10px;
+    }
+}
+@media only screen and (max-width: 720px) {
+    h1, #mute-fullscreen, #view-fullscreen {
+        display: none;
     }
 }
