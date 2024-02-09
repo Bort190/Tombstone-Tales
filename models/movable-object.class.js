@@ -39,7 +39,7 @@ class MovableObject extends DrawableObject {
     }
 
     move() {
-        if (this.x + this.width / 2 > world.character.x) {
+        if (this.x + this.width / 2 > world?.character.x) {
             this.moveLeft()
         }
         else {

@@ -8,8 +8,8 @@ class Character extends MovableObject {
     world;
     offsetX = 40;
     offsetY = 30;
-    weaponCount = 10;
-    coins = 5;
+    weaponCount = 3;
+    coins = 3;
     attackRange = 75;
     meleeDamage = 200;
     hurtTime = 60;

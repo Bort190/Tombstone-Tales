@@ -122,7 +122,7 @@ class Endboss extends MovableObject {
             else if (this.isAttacking()) {
                 this.playAnimationOnce(this.imagesAttack);
             }
-            else if (this.imagesTaunt && world.character.x > 2800) {
+            else if (this.imagesTaunt && world?.character.x > 2800) {
                 this.taunt();
             }
             else {

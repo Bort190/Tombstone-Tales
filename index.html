@@ -30,16 +30,19 @@
 	<h1>Tombstone Tales</h1>
 
 
-
-	<canvas id="canvas" width="720px" height="480px">
-	</canvas>
-	<div class="mobileButtonsContainer onlyOnMobile">
-		<div class="muteButtonContainer">
-			<button id="mute" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
-					src="img/mobileButtons/muteIcon.png"></button>
+	<div class="canvas-container">
+		<canvas id="canvas" width="720px" height="480px">
+		</canvas>
+	<div  class="buttonsContainer">
+		<div class="screenButtonsContainer">
+			<button id="view-fullscreen" onclick="fullscreen()"><img id="fullscreenbutton" class="mobileButtonImg"
+				src="img/mobileButtons/fullscreen.png"></button>
+			<button id="mute-fullscreen" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
+				src="img/mobileButtons/muteIcon.png"></button>
 		</div>
-		<div class="actionButtons">
-			<div class="leftButtons">
+	<div class="actionButtons">
+		
+			<div class="leftButtons scaleBigger">
 				<button class="mobileButtons" id="leftButton"><img class="mobileButtonImg"
 						src="img/mobileButtons/mobileLeft.png"></button>
 				<button class="mobileButtons" id="rightButton"><img class="mobileButtonImg"
@@ -55,44 +58,11 @@
 				<button class="mobileButtons" id="dashButton"><img class="mobileButtonImg"
 						src="img/mobileButtons/mobileDash.png"></button>
 			</div>
-		</div>
+		
 	</div>
 
-	<div class="d-flex">
-		<button id="view-fullscreen" onclick="fullscreen()"><img id="fullscreenbutton" class="mobileButtonImg"
-				src="img/mobileButtons/fullscreen.png"></button>
-		<button id="mute-fullscreen" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
-				src="img/mobileButtons/muteIcon.png"></button>
-
 	</div>
-
-	<div id="keyAssignment" class="d-none">
-		<table>
-			<tr>
-				<td><img src="img/keyboard_icons/arrow-keys.png"></td>
-				<td>Move Character</td>
-			</tr>
-			<tr>
-				<td><img src="img/keyboard_icons/d-key.png"></td>
-				<td>Throw bone</td>
-			</tr>
-			<tr>
-				<td><img src="img/keyboard_icons/f-key.png"></td>
-				<td>Melee Attack</td>
-			</tr>
-		</table>
-		<table>
-			<tr>
-				<td><img src="img/keyboard_icons/shift-key.png"></td>
-				<td>Dash</td>
-			</tr>
-			<tr>
-				<td><img src="img/keyboard_icons/space-key.png"></td>
-				<td>Jump</td>
-			</tr>
-		</table>
 	</div>
-
 
 	<script src="js/game.js"></script>
 </body>

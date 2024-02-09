@@ -3,65 +3,6 @@
     src: url('fonts/showthat.ttf') format('truetype');
 }
 
-p {
-    font-size: 15px;
-}
-
-.mobileButtonImg {
-    height: 35px;
-    width: 35px;
-
-}
-
-.d-none {
-    display: none !IMPORTANT;
-}
-
-#clickable {
-    height: 100px;
-    width: 100px;
-    background-color: black;
-}
-
-.mobileButtons {
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    margin: 10px 10px;
-    background-color: rgba(175, 170, 170, 0.856);
-}
-
-.muteButtonContainer {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.mobileButtonsContainer {
-    width: 720px;
-    height: 480px;
-    position: absolute;
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.actionButtons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.leftButtons {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: flex-end;
-}
-
-.rightButtons {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap-reverse;
-}
-
 body {
     margin: 0;
     display: flex;
@@ -77,16 +18,86 @@ body {
     color: red;
 }
 
+p {
+    font-size: 20px;
+}
+
+.mobileButtonImg {
+    height: 35px;
+    width: 35px;
+}
+
+.d-none {
+    display: none !IMPORTANT;
+}
+
+.canvas-container {
+    position: relative;
+    width: 720px;
+    aspect-ratio: 1.5;
+}
+
+.buttonsContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+}
+
+.buttonsContainer:hover {
+    opacity: 0.5;
+}
+
+.screenButtonsContainer {
+    padding: 10px;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+
+.actionButtons {
+    padding: 15px;
+    display: none;
+    justify-content: space-between;
+}
+
+.mobileButtons {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    margin: 10px 10px;
+    background-color: rgba(175, 170, 170, 0.37);
+    border: none;
+}
+
+.actionButtons div button:active {
+    background-color: rgba(89, 85, 85, 0.7);
+}
+
+.leftButtons {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+}
+
+.rightButtons {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap-reverse;
+}
+
+.scaleBigger {
+    transform: scale(1.3);
+}
+
 h1 {
     font-size: 64px;
     text-shadow: 7px 8px 6px black;
 }
-
-.d-flex{
-    width: 700px;
-
-}
-
 
 a {
     text-decoration: none;
@@ -95,21 +106,17 @@ a {
     -webkit-text-stroke: 1px white;
 }
 
-#view-fullscreen{
-    padding: 8px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-radius: 5px;
+#view-fullscreen {
+    border-radius: 50%;
+    padding: 10px;
     background-color: #a5a5a577;
-    font-family: 'showthat';
-    margin-right: 20px;
+    color: white;
 }
-#view-fullscreen:hover, #mute-fullscreen:hover{
+
+#view-fullscreen:hover,
+#mute-fullscreen:hover {
     background-color: #5c5c5c;
     cursor: pointer;
-
 }
 
 a h2:hover,
@@ -118,7 +125,7 @@ h3:hover {
 }
 
 canvas {
-    position: relative;
+    position: absolute;
     background-color: black;
     display: block;
 }
@@ -129,25 +136,31 @@ canvas {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #312f2fb0;
+    background: #312f2fcc;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 #keyAssignment {
-    height: 350px;
+    background-image: url(img/mobileButtons/gravestone.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    height: 750px;
     width: 600px;
     border-radius: 30px;
-    padding: 50px;
-    background-color: #b0b0b0;
-    border: 3px solid black;
-    box-shadow: 8px 6px 7px #7b7b7b;
-    color: #791e1e;
+    color: #7a0505;
     margin: 0 30px;
-
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.innerText {
+    width: 65%;
+}
+
 #mute-fullscreen {
     border-radius: 50%;
     padding: 10px;
@@ -167,45 +180,48 @@ canvas {
 }
 
 @media only screen and (max-width: 720px) {
-    h1 {
+
+    h1,
+    #view-fullscreen {
         display: none;
     }
 
-    canvas {
-        width: 100%;
+    .actionButtons {
+        display: flex;
+        opacity: 1;
     }
 
-    .mobileButtonsContainer {
-        display: flex;
-        height: 100vh;
+    .buttonsContainer {
+        opacity: 1;
+    }
+
+    .buttonsContainer:hover {
+        opacity: 1;
+    }
+
+    canvas,
+    .canvas-container,
+    .buttons-container {
         width: 100%;
     }
 }
 
 @media only screen and (max-height: 480px) {
-    canvas {
-        height: 100vh;
-    }
 
-    h1, #mute-fullscreen, #view-fullscreen {
-        display: none;
-    }
-
-
-    .mobileButtonsContainer {
-        display: flex;
+    canvas,
+    .canvas-container,
+    .buttons-container {
         height: 100vh;
     }
 }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 600px) {
 
     #keyAssignment div,
     #keyAssignment p,
     #keyAssignment {
-        padding: 5px;
-        font-size: 12px;
-
+        padding: 4px;
+        font-size: 17px;
     }
 
     .controls img {
@@ -214,12 +230,38 @@ canvas {
     }
 
     #controlsContainer {
-
-        gap: 10px;
+        gap: 5px;
     }
 }
-@media only screen and (max-width: 720px) {
-    h1, #mute-fullscreen, #view-fullscreen {
+
+@media only screen and (max-height: 630px) {
+
+    h1,
+    #view-fullscreen {
         display: none;
     }
+
+    .buttonsContainer {
+        opacity: 1;
+    }
+
+    .buttonsContainer:hover {
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width: 460px) {
+
+    #keyAssignment div,
+    #keyAssignment p,
+    #keyAssignment {
+        font-size: 14px;
+        padding: 1px;
+    }
+
+    .controls img {
+        width: 30px;
+        height: 30px;
+    }
+
 }
