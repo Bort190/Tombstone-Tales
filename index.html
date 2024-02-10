@@ -27,41 +27,42 @@
 </head>
 
 <body onload="init()">
+	<diy id="rotatePhone">
+		<h3>Please rotate your Phone!</h1>
+	</diy>
 	<h1>Tombstone Tales</h1>
 
 
 	<div class="canvas-container">
+
 		<canvas id="canvas" width="720px" height="480px">
 		</canvas>
-	<div  class="buttonsContainer">
-		<div class="screenButtonsContainer">
-			<button id="view-fullscreen" onclick="fullscreen()"><img id="fullscreenbutton" class="mobileButtonImg"
-				src="img/mobileButtons/fullscreen.png"></button>
-			<button id="mute-fullscreen" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
-				src="img/mobileButtons/muteIcon.png"></button>
+		<div class="buttonsContainer">
+			<div class="screenButtonsContainer">
+				<button id="view-fullscreen" onclick="fullscreen()"><img id="fullscreenbutton" class="mobileButtonImg"
+						src="img/mobileButtons/fullscreen.png"></button>
+				<button id="mute-fullscreen" onclick="muteAudio()"><img id="muteUnmuteButton" class="mobileButtonImg"
+						src="img/mobileButtons/muteIcon.png"></button>
+			</div>
+			<div class="actionButtons">
+				<div class="leftButtons scaleBigger">
+					<button class="mobileButtons" id="leftButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileLeft.png"></button>
+					<button class="mobileButtons" id="rightButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileRight.png"></button>
+				</div>
+				<div class="rightButtons">
+					<button class="mobileButtons" id="jumpButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileJump.png"></button>
+					<button class="mobileButtons" id="attackButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileAttack.png"></button>
+					<button class="mobileButtons" id="throwButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileBone.png"></button>
+					<button class="mobileButtons" id="dashButton"><img class="mobileButtonImg"
+							src="img/mobileButtons/mobileDash.png"></button>
+				</div>
+			</div>
 		</div>
-	<div class="actionButtons">
-		
-			<div class="leftButtons scaleBigger">
-				<button class="mobileButtons" id="leftButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileLeft.png"></button>
-				<button class="mobileButtons" id="rightButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileRight.png"></button>
-			</div>
-			<div class="rightButtons">
-				<button class="mobileButtons" id="jumpButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileJump.png"></button>
-				<button class="mobileButtons" id="attackButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileAttack.png"></button>
-				<button class="mobileButtons" id="throwButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileBone.png"></button>
-				<button class="mobileButtons" id="dashButton"><img class="mobileButtonImg"
-						src="img/mobileButtons/mobileDash.png"></button>
-			</div>
-		
-	</div>
-
-	</div>
 	</div>
 
 	<script src="js/game.js"></script>

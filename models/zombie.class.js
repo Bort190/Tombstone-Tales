@@ -6,6 +6,7 @@ class Zombie extends MovableObject {
     offsetX = 15;
     initialAttackAnimationCount = 10;
     initialAttackCooldown = 20;
+    spawndelay;
     hurtTime = 35;
 
     imagesWalking = [
@@ -58,6 +59,7 @@ class Zombie extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesHurt);
         this.loadImages(this.imagesAttack);
+        this.spawndelay = Math.random()*10;
         this.x = position * 1000 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 1;
         this.applyGravity();
@@ -65,35 +67,33 @@ class Zombie extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (!this.isHurt() && !this.isDead()) {
-                this.move();
-            }
+        setTimeout(() => {
+            setInterval(() => {
+                if (!this.isHurt() && !this.isDead()) {
+                    this.move();
+                }
+                this.checkAttackCooldown()
+            }, 1000 / 40)
 
-            this.checkAttackCooldown()
-        }, 1000 / 40)
-
-
-        setInterval(() => {
-            if (this.isDead()) {
-                setTimeout(() => {
-                    this.width = 190;
-                    this.height = 120;
-                }, 800);
-                this.playAnimationOnce(this.imagesDead);
-            }
-            else if (this.isAttacking()) {
-                playSound(this.zombieAttack_sound);
-                this.playAnimationOnce(this.imagesAttack);
-            }
-            else if (this.isHurt()) {
-                this.playAnimation(this.imagesHurt);
-            }
-            else {
-                this.playAnimation(this.imagesWalking);
-            }
-
-
-        }, 120)
+            setInterval(() => {
+                if (this.isDead()) {
+                    setTimeout(() => {
+                        this.width = 190;
+                        this.height = 120;
+                    }, 800);
+                    this.playAnimationOnce(this.imagesDead);
+                }
+                else if (this.isAttacking()) {
+                    playSound(this.zombieAttack_sound);
+                    this.playAnimationOnce(this.imagesAttack);
+                }
+                else if (this.isHurt()) {
+                    this.playAnimation(this.imagesHurt);
+                }
+                else {
+                    this.playAnimation(this.imagesWalking);
+                }
+            }, 120)
+        }, 100 * this.spawndelay);
     }
 }

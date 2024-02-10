@@ -86,7 +86,7 @@ class MovableObject extends DrawableObject {
 
 
     meleeAttack(enemy) {
-        
+
         if (enemy instanceof Endboss) {
             this.hit(enemy, this.meleeDamage, 0, 4);
         }
@@ -112,7 +112,6 @@ class MovableObject extends DrawableObject {
     knockback(time, height) {
         let knockbackTime = time;
         this.speedY = height;
-        console.log(world.knockbackLeft);
         const knockbackInterval = setInterval(() => {
             if (knockbackTime > 0) {
                 if (!world.knockbackLeft) { this.x += 6; }

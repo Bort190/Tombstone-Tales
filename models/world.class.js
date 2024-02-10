@@ -11,6 +11,7 @@ class World {
     endbossImage = new Image();
     coinBarImage = new Image();
     boneImage = new Image();
+    gravestoneImage = new Image();
     throwableObject = [];
     throwCooldown = 4;
     collectableArray = [];
@@ -30,6 +31,7 @@ class World {
         this.coinBarImage.src = 'img/8_coin/1.png';
         this.boneImage.src = 'img/6_bones/bottle_rotation/1.png';
         this.endbossImage.src = 'img/4_enemie_boss/6_idle/Wraith_01_Idle_000.png'
+        this.gravestoneImage.src = 'img/mobileButtons/gravestone2.png'
         this.draw();
         this.setWorld();
         this.run();
@@ -65,7 +67,6 @@ class World {
                     window.location = 'endscreen.html';
                 }, 2000);
             }
-            console.log(this.throwDeleteCounter)
         }, 200);
     }
 
@@ -231,7 +232,8 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinBar);
         this.ctx.drawImage(this.coinBarImage, 7, 40, 70, 70);
-        this.ctx.drawImage(this.boneImage, 17, 95, 50, 50);
+        this.ctx.drawImage(this.boneImage, 17, 99, 50, 50);
+        this.ctx.drawImage(this.gravestoneImage, 17, 9, 45, 45);
         this.ctx.font = "bold 35px Showthat";
         this.ctx.strokeStyle = "darkred";
         this.ctx.strokeText("x " + this.character.weaponCount, 75, 135);
