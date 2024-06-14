@@ -33,7 +33,6 @@ function muteAudio() {
         audioMute = true;
         muteButton.src = "img/mobileButtons/unMuteIcon.png";
     }
-    console.log(audioMute)
 }
 
 function playSound(sound) {

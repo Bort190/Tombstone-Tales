@@ -10,12 +10,16 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url("img/9_intro_outro_screens/title.jpg");
+    background-image: url("img/9_intro_outro_screens/Tombstone\ TalesFont.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     font-family: Showthat;
     color: red;
+}
+
+#titleScreen {
+    padding-top: 200px;
 }
 
 p {
@@ -193,7 +197,14 @@ canvas {
 
 @media only screen and (max-width: 720px) {
 
-    h1,
+    body {
+        background-image: url("img/9_intro_outro_screens/Tombstone\ Tales.png");
+    }
+
+    #titleScreen {
+        padding-top: 0px;
+    }
+
     #view-fullscreen {
         display: none;
     }
@@ -248,7 +259,13 @@ canvas {
 
 @media only screen and (max-height: 630px) {
 
-    h1,
+    body {
+        background-image: url("img/9_intro_outro_screens/Tombstone\ Tales.png");
+    }
+    #titleScreen {
+        padding-top: 0px;
+    }
+
     #view-fullscreen {
         display: none;
     }

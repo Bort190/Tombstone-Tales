@@ -41,6 +41,7 @@ class World {
         this.character.world = this;
         this.setCollectables();
         this.setAmmo();
+        this.level.enemies[3].animate();
     }
 
     setCollectables() {

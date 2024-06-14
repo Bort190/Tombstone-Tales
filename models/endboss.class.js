@@ -103,10 +103,10 @@ class Endboss extends MovableObject {
         this.loadImages(this.imagesTaunt);
         this.loadImages(this.imagesDead);
         this.x = 3000;
-        this.animate();
         this.applyGravity();
         this.otherDirection = true;
     }
+    
 
     animate() {
         setInterval(() => {
@@ -122,7 +122,7 @@ class Endboss extends MovableObject {
             else if (this.isAttacking()) {
                 this.playAnimationOnce(this.imagesAttack);
             }
-            else if (this.imagesTaunt && world?.character.x > 2800) {
+            else if (this.imagesTaunt && world.character.x > 2800) {
                 this.taunt();
             }
             else {

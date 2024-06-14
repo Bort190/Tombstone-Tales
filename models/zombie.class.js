@@ -59,7 +59,7 @@ class Zombie extends MovableObject {
         this.loadImages(this.imagesDead);
         this.loadImages(this.imagesHurt);
         this.loadImages(this.imagesAttack);
-        this.spawndelay = Math.random()*10;
+        this.spawndelay = Math.random() + 1;
         this.x = position * 1000 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 1;
         this.applyGravity();
