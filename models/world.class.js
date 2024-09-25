@@ -37,6 +37,9 @@ class World {
         this.run();
     }
 
+    /**
+     * sets the character, the collectables and the ammo in the world
+     */
     setWorld() {
         this.character.world = this;
         this.setCollectables();
@@ -44,18 +47,27 @@ class World {
         this.level.enemies[3].animate();
     }
 
+    /**
+     * sets collectables in the collecable array
+     */
     setCollectables() {
         for (let i = 0; i < 6; i++) {
             this.collectableArray.push(new Collectable('img/8_coin/1.png', 'skull', 80, i));
         }
     }
 
+    /**
+   * sets ammo in the ammo array
+   */
     setAmmo() {
         for (let i = 0; i < 6; i++) {
             this.ammoArray.push(new Collectable('img/6_bones/bottle_rotation/1.png', 'bone', 65, i));
         }
     }
 
+    /**
+     * sets an interval to check if the character is colliding, attacking or collecting something and reduces the throwcooldown variable
+     */
     run() {
         setInterval(() => {
             this.checkCollisions();
@@ -71,6 +83,9 @@ class World {
         }, 200);
     }
 
+    /**
+     * checks for collisions with another object. when colliding, knockbacks the player or the enemy and reduces its energy
+     */
     checkCollisions() {
         this.level.enemies.forEach(enemy => {
             if (this.character.isColliding(enemy) && !enemy.isDead() && !this.character.isDashing()) {
@@ -81,6 +96,9 @@ class World {
         });
     }
 
+    /**
+     * checks if an enemy is in melee range and attacks the enemy, if its in range. knockbacks and deletes the enemy if its hit or defeated
+     */
     checkMeleeRange() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isNearby(enemy) && !enemy.isDead()) {
@@ -95,6 +113,9 @@ class World {
     }
 
 
+    /**
+     * checks if the player is in attack range of the enemy and hits the player
+     */
     checkPlayerInAttackRange() {
         this.level.enemies.forEach((enemy, index) => {
             if (enemy.isNearby(this.character) && !enemy.isDead() && !enemy.isHurt()) {
@@ -114,6 +135,10 @@ class World {
         });
     }
 
+    /**
+     * triggers an enemy attack on the player
+     * @param {*} enemy the player 
+     */
     enemyAttackOnPlayer(enemy) {
         this.knockbackLeft = this.isEnemyRight(enemy.x + enemy.width / 2, this.character.x + this.character.width / 2);
         enemy.meleeAttack(this.character);
@@ -121,11 +146,21 @@ class World {
         enemy.attackCooldown = enemy.initialAttackCooldown;
     }
 
+    /**
+     * checks the position of enemy and player, which one is on the left or right side
+     * @param {*} enemyPosition 
+     * @param {*} characterPosition 
+     * @returns 
+     */
     isEnemyRight(enemyPosition, characterPosition) {
         return enemyPosition > characterPosition;
     }
 
 
+    /**
+     * deletes the enemy object. If the endboss is defeated, the window switches to the winscreen
+     * @param {*} enemy 
+     */
     deleteEnemy(enemy) {
         if (enemy.isDead() == true) {
             setTimeout(() => {
@@ -141,6 +176,9 @@ class World {
     }
 
 
+    /**
+     * gets coins or bones as collectables and adds them to its array
+     */
     getCollectable() {
         this.collectableArray.forEach(collectable => {
             if (this.character.isColliding(collectable)) {
@@ -159,7 +197,9 @@ class World {
         });
 
     }
-
+    /**
+     * creates a new throwable object left or right from the player and checks for hits
+     */
     checkThrowObject() {
         if (this.throwReady() && this.character.weaponCount > 0) {
             if (!this.character.otherDirection) {
@@ -173,6 +213,10 @@ class World {
         }
     }
 
+    /**
+     * checks if throwable object has hit an enemy
+     * @param {*} obj throwable object
+     */
     hitWithThrowingObject(obj) {
         playSound(this.throw_sound);
         this.throwDeleteCounter = 0;
@@ -182,6 +226,9 @@ class World {
         this.checkForHit(this.throwableObject[index], index);
     }
 
+    /**
+      * checks if throwable object has hit an enemy
+      */
     checkForHit(obj, index) {
         let throwInterval = setInterval(() => {
             this.level.enemies.forEach((enemy) => {
@@ -190,8 +237,15 @@ class World {
         }, 100);
     }
 
+    /**
+     * if enemy is hit, damages the enemy
+     * @param {*} obj throwable object
+     * @param {*} enemy enemy object
+     * @param {*} index index of throwable object in the array
+     * @param {*} throwInterval interval in which its checking for a hit
+     */
     damageEnemywithBone(obj, enemy, index, throwInterval) {
-        
+
         if (obj.isColliding(enemy) && !enemy.isDead() && !enemy.isHurt()) {
             obj.hit(enemy, 75, 5, 9)
             this.knockbackLeft = this.isEnemyRight(this.character.x + this.character.width / 2, enemy.x + enemy.width / 2);
@@ -201,11 +255,16 @@ class World {
         else if (this.throwDeleteCounter > 40) {
             this.deleteThrowableObject(index, throwInterval)
         }
-        else{
+        else {
             this.throwDeleteCounter++;
         }
     }
 
+    /**
+     * deletes throwable object
+     * @param {*} index index of throwable object in the array
+     * @param {*} throwInterval interval in which its checking for a hit
+     */
     deleteThrowableObject(index, throwInterval) {
         this.throwableObject.splice(index, 1);
         clearInterval(throwInterval);
@@ -213,10 +272,17 @@ class World {
     }
 
 
+    /**
+     * checks if throwable object is ready
+     * @returns true if ready
+     */
     throwReady() {
         return this.throwCooldown <= 0;
     }
 
+    /**
+     * adds background images to the canvas to create a parralax effect
+     */
     setParralaxEffect() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addObjectToMap(this.level.backgroundObjects);
@@ -228,6 +294,9 @@ class World {
         this.ctx.translate(-this.camera_x * 0.9, 0);
     }
 
+    /**
+     * sets fixed images to the canvas
+     */
     setFixedObjects() {
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
@@ -245,6 +314,9 @@ class World {
         this.ctx.translate(this.camera_x, 0);
     }
 
+    /**
+     * draws the images of all objects on the canvas
+     */
     draw() {
         this.setParralaxEffect();
         this.ctx.translate(this.camera_x, 0);
@@ -266,19 +338,23 @@ class World {
         })
     }
 
+    /**
+     * adds object to the canvas
+     */
     addObjectToMap(object) {
         object.forEach(o => {
             this.addToMap(o);
         })
     }
 
+    /**
+     * adds object to the canvas, whether its facing left or right
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        // mo.drawFrame(this.ctx);
-
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }

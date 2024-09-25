@@ -106,8 +106,10 @@ class Endboss extends MovableObject {
         this.applyGravity();
         this.otherDirection = true;
     }
-    
 
+    /**
+     * animates the endboss, depending on the action
+     */
     animate() {
         setInterval(() => {
             this.checkAttackCooldown()
@@ -130,7 +132,9 @@ class Endboss extends MovableObject {
             }
         }, 120)
     }
-
+    /**
+     * lets enboss taunt once
+     */
     taunt() {
         this.playAnimation(this.imagesTaunt);
         playSound(this.boss_taunt_sound);

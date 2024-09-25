@@ -27,6 +27,9 @@ class ThrowableObject extends MovableObject {
         this.throw();
     }
 
+    /**
+     * throws a throwable object
+     */
     throw() {
         world.character.weaponCount--;
         this.speedY = 22;

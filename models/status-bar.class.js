@@ -22,12 +22,20 @@ class StatusBar extends DrawableObject {
 
     }
 
+    /**
+     * sets the percentage of the healthbar
+     * @param {*} percentage health in %
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.imagesHealth[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * shows the right picture of the status bar, depending on the percentage
+     * @returns the number of the image which should be shown
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;

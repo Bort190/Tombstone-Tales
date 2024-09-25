@@ -22,13 +22,20 @@ class CoinBar extends DrawableObject {
         this.setPercentage(3);
 
     }
-
+    /**
+     * sets the percentage of the healthbar
+     * @param {*} coins number of coins
+     */
     setPercentage(coins) {
         this.coins = coins;
         let path = this.imagesCoins[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+    * shows the right picture of the coin bar, depending on the percentage
+    * @returns the number of the image which should be shown
+    */
     resolveImageIndex() {
         if (this.coins == 10) {
             return 5;

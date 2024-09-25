@@ -12,6 +12,11 @@ class Collectable extends DrawableObject {
 
     }
 
+    /**
+     * randomized the position of the collectables
+     * @param {*} type type of collectable
+     * @param {*} pos position of collectable
+     */
     randomizePosition(type, pos) {
         this.x = 600 * pos + Math.random() * 400;
 

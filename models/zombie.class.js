@@ -66,6 +66,9 @@ class Zombie extends MovableObject {
         this.animate();
     }
 
+    /**
+     * animates the zombie enemy, depending on the action
+     */
     animate() {
         setTimeout(() => {
             setInterval(() => {

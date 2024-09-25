@@ -163,6 +163,9 @@ class Character extends MovableObject {
         this.walking_sound.playbackRate = 1.4;
     }
 
+     /**
+     * animates the character, depending on the action
+     */
     animate() {
 
         setInterval(() => {
